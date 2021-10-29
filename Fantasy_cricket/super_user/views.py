@@ -27,7 +27,8 @@ def create_new_country_func(request):
 
 
 
+
 def create_new_match_func(request):
 	from .models import country
 	teams = [i['name'] for i in country.objects.values()]
-	return render(request, "Create_matches.html", {"Teams" : teams})
+	return render(request, "Create_matches.html", {"Teams" : teams, "date" : str(datetime.now().date())})
