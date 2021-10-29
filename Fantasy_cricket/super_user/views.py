@@ -23,3 +23,12 @@ def create_new_country_func(request):
 				   ).save()
 
 	return HttpResponse("""<html><body><h1>Country created successfully</h1><a href="login">Go to Main Window</a>""")
+
+
+
+
+
+def create_new_match_func(request):
+	from .models import country
+	teams = [i['name'] for i in country.objects.values()]
+	return render(request, "Create_matches.html", {"Teams" : teams, "date" : str(datetime.now().date())})

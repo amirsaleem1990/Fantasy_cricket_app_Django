@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<title>TITLE</title>
+	<head>
+	</head>
+	<body>
+		<h1>Create new match</h1>
+		<h4>INSTRUCTIONS:
+		    <p>The country drop downs will show all the countries added by Create new Country page.<p>
+		    <p>Country 1 cannot be the same as Country 2.<p>
+		    <p>Date must be of future<p>
+		    <p>There should not be a match between country 1 and country 2 on the same date<p>
+		    <p>Neither of the 2 co<p>
+		</h2>
+
+	
+		<form action="super_user/create_new_match" method="post">
+			
+			{% csrf_token %}
+
+			<select id="country_1" name="country_1">
+				{% for i in Teams %}
+					<option value={{ i }}>{{ i }}</option>
+				{% endfor %}
+			</select>
+            
+			<br>
+
+		    <p>Start date<input type="date" id="start" name="trip-start" value={{ date }} min={{ date }}></p>
+		                  
+
+		<input type="submit" value="Submit">
+		</form>
+
+	</body>
+</html>
+
+
+
