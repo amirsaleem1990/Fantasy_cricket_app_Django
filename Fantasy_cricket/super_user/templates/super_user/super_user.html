@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="no-js">    
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+        <title>CRICKET</title>
+        <meta name='description' content=''>
+        <link rel='stylesheet' href="{% static 'js-css/main.css' %}">
+        <script src="{% static 'js-css/modernizr-2.6.2.min.js' %}"></script>
+        
+    </head>
+    
+    <body>
+        <div id="new-plh" class="plh"></div>
+        <div id="actual-plh" class="plh">  
+            <section class="main-content clearfix homepage">
+                <div class="main-content_background">
+
+                    <div class="half_screen full-height-desk" id="biggest_block">
+                            <div class="text-block">
+                                <img data-image="{% static 'pics/Top-Fantasy-Apps-In-India.png' %}" src="{% static 'pics/Top-Fantasy-Apps-In-India.png' %}" alt="">
+                            </div>
+                    </div>
+
+                    <div class="half_screen full-height-desk">
+                        <a href="https://www.google.com">
+                            <div class="text-block three_row">
+                                <div class="image-container">
+                                    <img class="three_images" data-image="{% static 'pics/Create_new_country.png' %}" src="{% static 'pics/Create_new_country.png' %}" alt="">
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="https://www.youtube.com" class="">
+                            <div class="text-block three_row">
+                                <div class="image-container">
+                                    <img class="three_images" data-image="{% static 'pics/Create_matches.png' %}" src="{% static 'pics/Create_matches.png' %}" alt="">
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="https://www.youtube.com" class="">
+                            <div class="text-block three_row">
+                                <div class="image-container">
+                                    <img class="three_images" data-image="{% static 'pics/Record_performances.png' %}" src="{% static 'pics/Record_performances.png' %}" alt="">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>        
+            <div class='out-loader_wrapper'>
+                <div class='out-loader'>
+                    <div class='filler' id='filler'>
+                        <div class='filler-bar'></div>
+                        <p class='text--title' id='loader_text'>0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script> window.jQuery || document.write('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"><\/script>')</script>
+        <script src="{% static 'js-css/all.min.js' %}"></script>
+    </body>
+</html>
