@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Login',
     'signup',
     'normal_user',
+    'super_user',
 ]
 
 MIDDLEWARE = [
