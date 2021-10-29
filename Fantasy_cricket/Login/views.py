@@ -12,14 +12,12 @@ def auth(request):
 		# User not exist
 	    return render(request, 'user_not_found.html')
 	else:
-		# print("..................")
-		# print(password)
-		# print("..................")
-		if u[0]['password'] == password:
+		if u[0]['password'].strip() == password:
 			# AUTHENTICATED
 			if u[0]['is_superuser']:
-				return render(request, 'super_user/super_uer.html')
+				return render(request, 'super_user/super_user.html')
 			else:
 				return render(request, 'normal_user/normal_user.html')
+		else:
+			return render(request, 'wrong_password.html')
 
-	# u = User(email="my_email", full_name="my_full_name", password="my_password")
