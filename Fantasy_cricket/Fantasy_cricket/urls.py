@@ -21,7 +21,10 @@ from django.conf.urls import include, url
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name="Login/login.html")),
+    path('Create_new_country', TemplateView.as_view(template_name="super_user/Create_new_country.html")),
     path('signup', TemplateView.as_view(template_name="signup/signup.html")),
+    
     url("login", include("Login.urls")),
     url("signup_", include("signup.urls")),
+    url("super_user", include("super_user.urls")),
 ]
