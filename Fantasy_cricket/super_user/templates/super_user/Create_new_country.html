@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<title>TITLE</title>
+	<head>
+	</head>
+	<body>
+		<h1>Create new Country</h1>
+		<h4>INSTRUCTIONS:
+			<p>- At least 11 players should be entered, remaining 4 are optional.</p>
+			<p>- A country should have one player from each type of player. That is, you cannot make a country team with only batsmen and bowlers. But you can make a country which has 5 wicket keepers, 2 batsmen, 2 bowlers and 2 all rounders. As long as there are players from each type of the player then the country is valid.</p>
+			<p>- Country name should be unique</p>
+		</h2>
+
+	
+		<form action="super_user/create_new_country_func" method="post">
+			
+			{% csrf_token %}
+
+			<label for="country_name">Country Name:</label>
+			<input type="text" id="country_name" name="country_name"><br><br>
+			<br><br>
+
+
+			<label for="playerName_1">Player 1:</label>
+			<input type="text" id="playerName_1" name="playerName_1">
+			<select id="player_1" name="player_1">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_2">Player 2:</label>
+			<input type="text" id="playerName_2" name="playerName_2">
+			<select id="player_2" name="player_2">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_3">Player 3:</label>
+			<input type="text" id="playerName_3" name="playerName_3">
+			<select id="player_3" name="player_3">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_4">Player 4:</label>
+			<input type="text" id="playerName_4" name="playerName_4">
+			<select id="player_4" name="player_4">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_5">Player 5:</label>
+			<input type="text" id="playerName_5" name="playerName_5">
+			<select id="player_5" name="player_5">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_6">Player 6:</label>
+			<input type="text" id="playerName_6" name="playerName_6">
+			<select id="player_6" name="player_6">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_7">Player 7:</label>
+			<input type="text" id="playerName_7" name="playerName_7">
+			<select id="player_7" name="player_7">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_8">Player 8:</label>
+			<input type="text" id="playerName_8" name="playerName_8">
+			<select id="player_8" name="player_8">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_9">Player 9:</label>
+			<input type="text" id="playerName_9" name="playerName_9">
+			<select id="player_9" name="player_9">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_10">Player 10:</label>
+			<input type="text" id="playerName_10" name="playerName_10">
+			<select id="player_10" name="player_10">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_11">Player 11:</label>
+			<input type="text" id="playerName_11" name="playerName_11">
+			<select id="player_11" name="player_11">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_12">Player 12:</label>
+			<input type="text" id="playerName_12" name="playerName_12">
+			<select id="player_12" name="player_12">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+            
+			<label for="playerName_13">Player 13:</label>
+			<input type="text" id="playerName_13" name="playerName_13">
+			<select id="player_13" name="player_13">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+
+			<label for="playerName_14">Player 14:</label>
+			<input type="text" id="playerName_14" name="playerName_14">
+			<select id="player_14" name="player_14">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+
+			<label for="playerName_15">Player 15:</label>
+			<input type="text" id="playerName_15" name="playerName_15">
+			<select id="player_15" name="player_15">
+				<option value="batsman">Batsman</option>
+				<option value="bowler">Bowler</option>
+				<option value="all_rounder">All rounder</option>
+				<option value="wicket_keeper">Wicket keeper</option>
+			</select>
+			<br>
+
+		<input type="submit" value="Submit">
+		</form>
+	</body>
+</html>
+
+
+
