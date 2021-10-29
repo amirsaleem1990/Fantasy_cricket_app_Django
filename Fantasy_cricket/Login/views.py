@@ -17,6 +17,9 @@ def auth(request):
 		# print("..................")
 		if u[0]['password'] == password:
 			# AUTHENTICATED
-			return render(request, 'normal_user/normal_user.html')
+			if u[0]['is_superuser']:
+				return render(request, 'super_user/super_uer.html')
+			else:
+				return render(request, 'normal_user/normal_user.html')
 
 	# u = User(email="my_email", full_name="my_full_name", password="my_password")
