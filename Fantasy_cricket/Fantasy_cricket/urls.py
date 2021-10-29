@@ -27,4 +27,5 @@ urlpatterns = [
     url("login", include("Login.urls")),
     url("signup_", include("signup.urls")),
     url("super_user", include("super_user.urls")),
+    url("create_new_match", include("super_user.urls"))
 ]
