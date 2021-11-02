@@ -21,5 +21,5 @@ def create_team(request):
 	
 	for i in data:
 		param[i[-1]].append((i[1], i[0]))
-
+		
 	return render(request, "create_team.html", param)
