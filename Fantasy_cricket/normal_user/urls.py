@@ -1,7 +1,9 @@
 from django.conf.urls import url
 from .views import *
-from django.urls import include
+from django.urls import include, path
 
 urlpatterns = [
-    url("create_team", create_team, name="create_team"),
+    url("create_team", create_team,  name="create_team"),
+    url("my_form",     my_form,      name="my_form"    ),
 ]
+
