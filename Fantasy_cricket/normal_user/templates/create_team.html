@@ -1,33 +1,36 @@
 <html>
 	<body>
 		<h1>Create a team</h1>
-		<form action="">
+
+		<form action="/normal_user/my_form" method="POST">
+
+			{% csrf_token %}
 
 			<p><b>Bowler</b></p>
 			{% for i in bowler %}
-				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.0 }}|{{ i.1 }}" value="{{ i.0 }} ({{ i.1 }})">
+				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|bowler">
 				<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
 			{% endfor %}
 
 			<p><b>All rounder</b></p>
 			{% for i in all_rounder %}
-				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.0 }}|{{ i.1 }}" value="{{ i.0 }} ({{ i.1 }})">
+				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|all_rounder">
 				<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
 			{% endfor %}
 
 			<p><b>Wicket keeper</b></p>
 			{% for i in wicket_keeper %}
-				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.0 }}|{{ i.1 }}" value="{{ i.0 }} ({{ i.1 }})">
+				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|wicket_keeper">
 				<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
 			{% endfor %}
 
 			<p><b>Batsman</b></p>
 			{% for i in batsman %}
-				<input type="checkbox" id="{{ i.0 }}" name="{{ i.0 }}" value="{{ i.0 }}">
-				<label for="{{ i.0 }}">{{ i.0 }} ({{ i.1 }})</label><br>
+				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|batsman">
+				<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
 			{% endfor %}
 
-		<input type="submit" value="Submit">
+			<input type="submit" value="Submit">
 
 		</form>
 	</body>
