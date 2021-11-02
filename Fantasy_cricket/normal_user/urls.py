@@ -3,5 +3,5 @@ from .views import *
 from django.urls import include
 
 urlpatterns = [
-    url("", normal_user, name="normal_user"), # myapp.views.hello
+    url("create_team", create_team, name="create_team"),
 ]
