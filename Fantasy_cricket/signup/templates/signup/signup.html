@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Signup</h1>
-    <form action="signup_" method="post" id="signup_form">
-        {% csrf_token %}
-        Email: <input type="text" name="email_address"><br>
-        Full name: <input type="text" name="full_name"><br>
-        Password: <input type="text" name="password"><br>
-        Re-type password: <input type="text" name="retype_password"><br>
-        <input type="submit">
-    </form>
+    <body>
+        style="background-color:grey;"
+        <h1>Signup</h1>
+        <form action="signup_" method="post" id="signup_form">
+            {% csrf_token %}
+            Email: <input type="text" name="email_address"><br>
+            Full name: <input type="text" name="full_name"><br>
+            Password: <input type="text" name="password"><br>
+            Re-type password: <input type="text" name="retype_password"><br>
+            <input type="submit">
+        </form>
+    </body>
 {% endblock content %}
