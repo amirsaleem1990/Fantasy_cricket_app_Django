@@ -3,6 +3,7 @@ from super_user.models import *
 from django.http import HttpResponse
 import pandas as pd
 from django.db import connection
+from django.http import JsonResponse
 
 def create_team(request):
 	cursor = connection.cursor()
@@ -44,4 +45,13 @@ def ajax_creation_form(request):
 	df = pd.DataFrame(lst, columns=['id', 'player', 'country', 'type'])
 	print(df.to_string())
 	print("------------------------------------")
-	return HttpResponse("""<html><body><h1>HY</h1></body></html>""")
+	import json
+	return JsonResponse({
+						 "selected_players"          : str(len(df)                                 ),
+		                 "left_players"              : str(11 - len(df)                            ),
+		                 "betsman_select_more"       : str(3 - df['type'].eq("batsman").sum()      ),
+						 "bowlers_select_more"       : str(3 - df['type'].eq("bowler").sum()       ),
+						 "all_rounder_select_more"   : str(2 - df['type'].eq("all_rounder").sum()  ),
+						 "wicket_keeper_select_more" : str(1 - df['type'].eq("wicket_keeper").sum()),
+		                 })
+	# return HttpResponse("""<html><body><h1>HY</h1></body></html>""")
