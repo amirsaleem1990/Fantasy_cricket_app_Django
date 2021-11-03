@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from super_user.models import *
 from django.http import HttpResponse
-
+import pandas as pd
+from django.db import connection
 
 def create_team(request):
-	print("_---------------------------------!!!!")
-	from django.db import connection
 	cursor = connection.cursor()
 
 	data = cursor.execute('''
@@ -27,10 +26,22 @@ def create_team(request):
 
 
 def my_form(request):
+	# print("------------------------------------")
+	# for k,v in dict(request.POST).items():
+		# if k.isdigit():
+			# name, country, type_ = v[0].split("|")
+			# print(k, name, country, type_)
+	# print("------------------------------------")
+	return HttpResponse("""<html><body><h1>HY</h1></body></html>""")
+
+
+def ajax_creation_form(request):
 	print("------------------------------------")
-	for k,v in dict(request.POST).items():
+	lst = []
+	for k,v in dict(request.GET).items():
 		if k.isdigit():
-			name, country, type_ = v[0].split("|")
-			print(k, name, country, type_)
+			lst.append([k] + v[0].split("|"))
+	df = pd.DataFrame(lst, columns=['id', 'player', 'country', 'type'])
+	print(df.to_string())
 	print("------------------------------------")
 	return HttpResponse("""<html><body><h1>HY</h1></body></html>""")
