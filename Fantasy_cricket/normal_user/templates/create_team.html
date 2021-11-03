@@ -1,37 +1,144 @@
+<!DOCTYPE html>
 <html>
-	<body>
-		<h1>Create a team</h1>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+		* {
+		  box-sizing: border-box;
+		}
 
-		<form action="/normal_user/my_form" method="POST">
+		/* Create four equal columns that floats next to each other */
+		.column {
+		  float: left;
+		  width: 25%;
+		}
+		.column-2 {
+		  float: left;
+		  width: 15%;
+		  padding: 0 15px;
+		}
+
+		/* Clear floats after the columns */
+		.row:after {
+		  content: "";
+		  display: table;
+		  clear: both;
+		}
+
+		.submit {
+		  background-color: #4CAF50;
+		  border: none;
+		  color: white;
+		  padding: 15px 32px;
+		  text-align: center;
+		  text-decoration: none;
+		  display: inline-block;
+		  font-size: 16px;
+		  margin: 4px 2px;
+		  cursor: pointer;
+		}
+
+		table {
+		  font-family: arial, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+
+		td, th {
+		  border: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+
+		</style>
+	</head>
+	<body>
+
+		<form action="/normal_user/my_form" method="POST" id="team_createion_form" team-createion-form-url="{% url 'ajax_creation_form' %}">
 
 			{% csrf_token %}
 
-			<p><b>Bowler</b></p>
-			{% for i in bowler %}
-				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|bowler">
-				<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
-			{% endfor %}
+			<h1>Create a team</h1>
+			
+			<div id="betsman_select_more">3</div>
+			<div id="bowlers_select_more">3</div>
+			<div id="all_rounder_select_more">2</div>
+			<div id="wicket_keeper_select_more">2</div>
+			<div id="selected_players">0</div>
+			<div id="left_players">11</div>
 
-			<p><b>All rounder</b></p>
-			{% for i in all_rounder %}
-				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|all_rounder">
-				<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
-			{% endfor %}
 
-			<p><b>Wicket keeper</b></p>
-			{% for i in wicket_keeper %}
-				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|wicket_keeper">
-				<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
-			{% endfor %}
+			<div class="row">
+				
+				<div class="column" style="background-color:#aaa;">
+				<center><h3><b>Bowler</b></h3></center>
+				{% for i in bowler %}
+					<input type="checkbox" class="player_c" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|bowler">
+					<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
+				{% endfor %}
+				</div>
 
-			<p><b>Batsman</b></p>
-			{% for i in batsman %}
-				<input type="checkbox" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|batsman">
-				<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
-			{% endfor %}
+				<div class="column" style="background-color:#bbb;">
+					<center><h3><b>All rounder</b></h3></center>
+					{% for i in all_rounder %}
+						<input type="checkbox" class="player_c" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|all_rounder">
+						<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
+					{% endfor %}
+				</div>
+					
+				<div class="column" style="background-color:#ccc;">
+					<center><h3><b>Wicket keeper</b></h3></center>
+					{% for i in wicket_keeper %}
+						<input type="checkbox" class="player_c" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|wicket_keeper">
+						<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
+					{% endfor %}
+				</div>
 
-			<input type="submit" value="Submit">
+				<div class="column" style="background-color:#ddd;">
+					<center><h3><b>Batsman</b></h3></center>
+					{% for i in batsman %}
+						<input type="checkbox" class="player_c" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|batsman">
+						<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
+					{% endfor %}
+				</div>
+			</div>
 
+			<br><br>
+			<center><input type="submit" class="submit" value="Submit"></center>
+			<br><br>
 		</form>
+
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<script>
+
+		// $('.player_c').change(function() {
+		$( 'form' ).change(function(e) {
+			// e.preventDefault();
+			// alert ($(this).serialize())
+		    var data = $('form').serialize();
+		            $.ajax({
+		                url: 'ajax_creation_form',
+		                data: data,
+		                success: function(data) {
+			                $('#betsman_select_more').html(6);
+							$('#bowlers_select_more').html(6)
+							$('#all_rounder_select_more').html(6)
+							$('#all_rounder_select_more').html(6)
+							$('#selected_players').html(6)
+							$('#left_players').html(6)
+		                },
+		            });
+		      });
+
+		</script>
+
 	</body>
 </html>
+
+
+
+
