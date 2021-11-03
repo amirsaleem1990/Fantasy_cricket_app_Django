@@ -78,7 +78,8 @@
 				<div class="column" style="background-color:#aaa;">
 				<center><h3><b>Bowler</b></h3></center>
 				{% for i in bowler %}
-					<input type="checkbox" class="player_c" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|bowler">
+					<input type="checkbox" class="player_c" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|bowler" >
+					<!-- disabled -->
 					<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
 				{% endfor %}
 				</div>
@@ -118,25 +119,28 @@
 
 		// $('.player_c').change(function() {
 		$( 'form' ).change(function(e) {
-			// e.preventDefault();
-			// alert ($(this).serialize())
 		    var data = $('form').serialize();
 		            $.ajax({
 		                url: 'ajax_creation_form',
 		                data: data,
 		                success: function(data) {
-
 			                $('#betsman_select_more').html      ("betsman_select_more      : " + data.betsman_select_more      );
 							$('#bowlers_select_more').html      ("bowlers_select_more      : " + data.bowlers_select_more      );
 							$('#all_rounder_select_more').html  ("all_rounder_select_more  : " + data.all_rounder_select_more  );
 							$('#wicket_keeper_select_more').html("wicket_keeper_select_more: " + data.wicket_keeper_select_more);
 							$('#selected_players').html         ("selected_players         : " + data.selected_players         );
 							$('#left_players').html             ("left_players             : " + data.left_players             );
-		                },
-		            });
-		      });
-
+							$('input[type=checkbox]').attr('disabled', eval(data.all_players_selected));
+							if (eval(data.all_players_selected) === true) {
+								var lst = data.ids_do_not_desable;
+								for (v in lst) {
+									x = 'input[id="' + lst[v] + '"]'
+									$(x).attr('disabled', false);
+								}
+							}
+						}
+					});
+		        });
 		</script>
-
 	</body>
 </html>
