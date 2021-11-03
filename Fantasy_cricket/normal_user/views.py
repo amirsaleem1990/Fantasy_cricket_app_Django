@@ -21,7 +21,6 @@ def create_team(request):
 	
 	for e,i in enumerate(data):
 		param[i[-1]].append((i[1], i[0], e))
-		
 	return render(request, "create_team.html", param)
 
 
@@ -53,5 +52,6 @@ def ajax_creation_form(request):
 						 "bowlers_select_more"       : str(3 - df['type'].eq("bowler").sum()       ),
 						 "all_rounder_select_more"   : str(2 - df['type'].eq("all_rounder").sum()  ),
 						 "wicket_keeper_select_more" : str(1 - df['type'].eq("wicket_keeper").sum()),
+						 "all_players_selected"      : ("true" if len(df) == 11 else "false")       ,
+						 "ids_do_not_desable"        : df.apply(lambda x:x.player+"|"+x.country, axis=1).to_list(),
 		                 })
-	# return HttpResponse("""<html><body><h1>HY</h1></body></html>""")
