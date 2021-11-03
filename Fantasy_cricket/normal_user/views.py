@@ -45,6 +45,7 @@ def ajax_creation_form(request):
 	print(df.to_string())
 	print("------------------------------------")
 	import json
+	print(len(df))
 	return JsonResponse({
 						 "selected_players"          : str(len(df)                                 ),
 		                 "left_players"              : str(11 - len(df)                            ),
@@ -54,4 +55,10 @@ def ajax_creation_form(request):
 						 "wicket_keeper_select_more" : str(1 - df['type'].eq("wicket_keeper").sum()),
 						 "all_players_selected"      : ("true" if len(df) == 11 else "false")       ,
 						 "ids_do_not_desable"        : df.apply(lambda x:x.player+"|"+x.country, axis=1).to_list(),
+
+						 "betsman_select_more_task_completed"      : ("true" if df['type'].eq("batsman").sum()       >= 3 else "false"),
+						 "bowlers_select_more_task_completed"      : ("true" if df['type'].eq("bowler").sum()        >= 3 else "false"),
+						 "all_rounder_select_more_task_completed"  : ("true" if df['type'].eq("all_rounder").sum()   >= 2 else "false"),
+						 "wicket_keeper_select_more_task_completed": ("true" if df['type'].eq("wicket_keeper").sum() >= 2 else "false"),
+						 "left_players_task_completed"             : ("true" if len(df) == 11 else "false"),
 		                 })
