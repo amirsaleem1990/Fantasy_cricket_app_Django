@@ -24,9 +24,9 @@ urlpatterns = [
     path('Create_new_country', TemplateView.as_view(template_name="super_user/Create_new_country.html")),
     path('signup', TemplateView.as_view(template_name="signup/signup.html")),
     
-    url("login", include("Login.urls")),
-    url("signup_", include("signup.urls")),
-    url("super_user", include("super_user.urls")),
-    url("create_new_match", include("super_user.urls")),
-    url("normal_user/", include("normal_user.urls")),
+    url("login",               include("Login.urls")      ),
+    url("signup_",             include("signup.urls")     ),
+    url("super_user",          include("super_user.urls") ),
+    url("create_new_match",    include("super_user.urls") ),
+    url("normal_user/",        include("normal_user.urls")),
 ]
