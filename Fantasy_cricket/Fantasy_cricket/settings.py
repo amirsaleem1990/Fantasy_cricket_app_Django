@@ -133,3 +133,8 @@ AUTH_USER_MODEL = 'Login.User'
 
 
 SILENCED_SYSTEM_CHECKS = ['auth.E003', 'auth.W004']
+
+
+AUTHENTICATION_BACKENDS = (
+    'Fantasy_cricket.authentication.EmailBackend',
+)
