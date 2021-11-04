@@ -44,6 +44,18 @@ def ajax_creation_form(request):
 	df = pd.DataFrame(lst, columns=['id', 'player', 'country', 'type'])
 	# print(df.to_string())
 	# print("------------------------------------")
+
+
+	betsman_select_more_task_completed       = ("true" if df['type'].eq("batsman").sum()       >= 3 else "false")
+	bowlers_select_more_task_completed       = ("true" if df['type'].eq("bowler").sum()        >= 3 else "false")
+	all_rounder_select_more_task_completed   = ("true" if df['type'].eq("all_rounder").sum()   >= 2 else "false")
+	wicket_keeper_select_more_task_completed = ("true" if df['type'].eq("wicket_keeper").sum() >= 2 else "false")
+	left_players_task_completed              = ("true" if len(df) == 11 else "false")
+	left_countries_task_completed            = ("true" if len(df.country.unique()) >= 3 else "false")
+	can_submit                               = all([i == "true" for i in [betsman_select_more_task_completed, bowlers_select_more_task_completed, all_rounder_select_more_task_completed, wicket_keeper_select_more_task_completed, left_players_task_completed, left_countries_task_completed] ])
+	can_submit                               = ("true" if can_submit else "false")
+
+
 	return JsonResponse({
 						 "selected_players"          : str(len(df)                                 ),
 		                 "left_players"              : str(11 - len(df)                            ),
@@ -55,10 +67,11 @@ def ajax_creation_form(request):
 						 "left_countries"            : str(3 - len(df.country.unique()))            ,
 						 "ids_do_not_desable"        : df.apply(lambda x:x.player+"|"+x.country, axis=1).to_list(),
 
-						 "betsman_select_more_task_completed"      : ("true" if df['type'].eq("batsman").sum()       >= 3 else "false"),
-						 "bowlers_select_more_task_completed"      : ("true" if df['type'].eq("bowler").sum()        >= 3 else "false"),
-						 "all_rounder_select_more_task_completed"  : ("true" if df['type'].eq("all_rounder").sum()   >= 2 else "false"),
-						 "wicket_keeper_select_more_task_completed": ("true" if df['type'].eq("wicket_keeper").sum() >= 2 else "false"),
-						 "left_players_task_completed"             : ("true" if len(df) == 11 else "false"),
-						 "left_countries_task_completed"           : ("true" if len(df.country.unique()) >= 3 else "false")
+						 "betsman_select_more_task_completed"      : betsman_select_more_task_completed ,
+						 "bowlers_select_more_task_completed"      : bowlers_select_more_task_completed ,
+						 "all_rounder_select_more_task_completed"  : all_rounder_select_more_task_completed ,
+						 "wicket_keeper_select_more_task_completed": wicket_keeper_select_more_task_completed ,
+						 "left_players_task_completed"             : left_players_task_completed ,
+						 "left_countries_task_completed"           : left_countries_task_completed ,
+						 "can_submit"                              : can_submit,
 		                 })
