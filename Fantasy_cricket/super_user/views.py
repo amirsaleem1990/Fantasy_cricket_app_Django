@@ -93,3 +93,8 @@ def match_created(request):
 	new_match.save()
 
 	return render(request, 'super_user/match_created.html')
+
+
+
+def record_performance_func(request):
+	return HttpResponse("record_performances called")
