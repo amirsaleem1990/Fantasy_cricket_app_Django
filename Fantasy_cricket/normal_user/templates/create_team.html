@@ -71,6 +71,7 @@
 				<div style="background: red;" id="all_rounder_select_more">all_rounder_select_more: 2</div>
 				<div style="background: red;" id="wicket_keeper_select_more">wicket_keeper_select_more: 2</div>
 				<div style="background: red;" id="left_players">left_players: 1</div>
+				<div style="background: red;" id="left_countries">left_countries: 3</div>
 				<br>
 				<div style="background: red;" id="selected_players">selected_players: 0</div>
 			</h3>
@@ -132,6 +133,7 @@
 							$('#wicket_keeper_select_more').html("wicket_keeper_select_more: " + data.wicket_keeper_select_more);
 							$('#selected_players').html         ("selected_players         : " + data.selected_players         );
 							$('#left_players').html             ("left_players             : " + data.left_players             );
+							$('#left_countries').html           ("left_countries           : " + data.left_countries           );
 							$('input[type=checkbox]').attr('disabled', eval(data.all_players_selected));
 							if (eval(data.all_players_selected) === true) {
 								var lst = data.ids_do_not_desable;
@@ -165,6 +167,12 @@
 							}else{
 								$('div[id=left_players]').attr('style', "background: red;")
 							}
+							if (eval(data.left_countries_task_completed) === true){
+								$('div[id=left_countries]').attr('style', "background: LightGreen;")
+							}else{
+								$('div[id=left_countries]').attr('style', "background: red;")
+							}
+							
 						}
 					});
 		        });
