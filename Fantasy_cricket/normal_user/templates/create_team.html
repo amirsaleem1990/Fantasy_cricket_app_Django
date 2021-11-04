@@ -112,7 +112,7 @@
 			</div>
 
 			<br><br>
-			<center><input type="submit" class="submit" value="Submit"></center>
+			<center><input type="submit" class="submit" value="Submit" disabled></center>
 			<br><br>
 		</form>
 
@@ -171,6 +171,11 @@
 								$('div[id=left_countries]').attr('style', "background: LightGreen;")
 							}else{
 								$('div[id=left_countries]').attr('style', "background: red;")
+							}
+							if (eval(data.can_submit) === true){
+								$('input[class=submit]').attr('disabled', false)
+							}else{
+								$('input[class=submit]').attr('disabled', true)
 							}
 							
 						}
