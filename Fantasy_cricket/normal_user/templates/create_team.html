@@ -54,6 +54,7 @@
 		  background-color: #dddddd;
 		}
 
+
 		</style>
 	</head>
 	<body>
@@ -65,12 +66,14 @@
 			<h1>Create a team</h1>
 			
 			<h3>
-				<div id="betsman_select_more">betsman_select_more: 3</div>
-				<div id="bowlers_select_more">bowlers_select_more: 3</div>
-				<div id="all_rounder_select_more">all_rounder_select_more: 2</div>
-				<div id="wicket_keeper_select_more">wicket_keeper_select_more: 2</div>
-				<div id="selected_players">selected_players: 0</div>
-				<div id="left_players">left_players: 1</div>
+				<div style="background: red;" id="betsman_select_more">betsman_select_more: 3</div>
+				<div style="background: red;" id="bowlers_select_more">bowlers_select_more: 3</div>
+				<div style="background: red;" id="all_rounder_select_more">all_rounder_select_more: 2</div>
+				<div style="background: red;" id="wicket_keeper_select_more">wicket_keeper_select_more: 2</div>
+				<div style="background: red;" id="left_players">left_players: 1</div>
+				<div style="background: red;" id="left_countries">left_countries: 3</div>
+				<br>
+				<div style="background: red;" id="selected_players">selected_players: 0</div>
 			</h3>
 
 			<div class="row">
@@ -79,7 +82,6 @@
 				<center><h3><b>Bowler</b></h3></center>
 				{% for i in bowler %}
 					<input type="checkbox" class="player_c" id="{{ i.0 }}|{{ i.1 }}" name="{{ i.2 }}" value="{{ i.0 }}|{{ i.1 }}|bowler" >
-					<!-- disabled -->
 					<label for="{{ i.0 }}|{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</label><br>
 				{% endfor %}
 				</div>
@@ -124,12 +126,14 @@
 		                url: 'ajax_creation_form',
 		                data: data,
 		                success: function(data) {
+
 			                $('#betsman_select_more').html      ("betsman_select_more      : " + data.betsman_select_more      );
 							$('#bowlers_select_more').html      ("bowlers_select_more      : " + data.bowlers_select_more      );
 							$('#all_rounder_select_more').html  ("all_rounder_select_more  : " + data.all_rounder_select_more  );
 							$('#wicket_keeper_select_more').html("wicket_keeper_select_more: " + data.wicket_keeper_select_more);
 							$('#selected_players').html         ("selected_players         : " + data.selected_players         );
 							$('#left_players').html             ("left_players             : " + data.left_players             );
+							$('#left_countries').html           ("left_countries           : " + data.left_countries           );
 							$('input[type=checkbox]').attr('disabled', eval(data.all_players_selected));
 							if (eval(data.all_players_selected) === true) {
 								var lst = data.ids_do_not_desable;
@@ -138,6 +142,37 @@
 									$(x).attr('disabled', false);
 								}
 							}
+							if (eval(data.betsman_select_more_task_completed) === true){
+								$('div[id=betsman_select_more]').attr('style', "background: LightGreen;")
+							}else{
+								$('div[id=betsman_select_more]').attr('style', "background: red;")
+							}
+							if (eval(data.bowlers_select_more_task_completed) === true){
+								$('div[id=bowlers_select_more]').attr('style', "background: LightGreen;")
+							}else{
+								$('div[id=bowlers_select_more]').attr('style', "background: red;")
+							}
+							if (eval(data.all_rounder_select_more_task_completed) === true){
+								$('div[id=all_rounder_select_more]').attr('style', "background: LightGreen;")
+							}else{
+								$('div[id=all_rounder_select_more]').attr('style', "background: red;")
+							}
+							if (eval(data.wicket_keeper_select_more_task_completed) === true){
+								$('div[id=wicket_keeper_select_more]').attr('style', "background: LightGreen;")
+							}else{
+								$('div[id=wicket_keeper_select_more]').attr('style', "background: red;")
+							}
+							if (eval(data.left_players_task_completed) === true){
+								$('div[id=left_players]').attr('style', "background: LightGreen;")
+							}else{
+								$('div[id=left_players]').attr('style', "background: red;")
+							}
+							if (eval(data.left_countries_task_completed) === true){
+								$('div[id=left_countries]').attr('style', "background: LightGreen;")
+							}else{
+								$('div[id=left_countries]').attr('style', "background: red;")
+							}
+							
 						}
 					});
 		        });

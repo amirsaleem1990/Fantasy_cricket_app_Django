@@ -36,15 +36,14 @@ def my_form(request):
 
 
 def ajax_creation_form(request):
-	print("------------------------------------")
+	# print("------------------------------------")
 	lst = []
 	for k,v in dict(request.GET).items():
 		if k.isdigit():
 			lst.append([k] + v[0].split("|"))
 	df = pd.DataFrame(lst, columns=['id', 'player', 'country', 'type'])
-	print(df.to_string())
-	print("------------------------------------")
-	import json
+	# print(df.to_string())
+	# print("------------------------------------")
 	return JsonResponse({
 						 "selected_players"          : str(len(df)                                 ),
 		                 "left_players"              : str(11 - len(df)                            ),
@@ -53,5 +52,13 @@ def ajax_creation_form(request):
 						 "all_rounder_select_more"   : str(2 - df['type'].eq("all_rounder").sum()  ),
 						 "wicket_keeper_select_more" : str(1 - df['type'].eq("wicket_keeper").sum()),
 						 "all_players_selected"      : ("true" if len(df) == 11 else "false")       ,
+						 "left_countries"            : str(3 - len(df.country.unique()))            ,
 						 "ids_do_not_desable"        : df.apply(lambda x:x.player+"|"+x.country, axis=1).to_list(),
+
+						 "betsman_select_more_task_completed"      : ("true" if df['type'].eq("batsman").sum()       >= 3 else "false"),
+						 "bowlers_select_more_task_completed"      : ("true" if df['type'].eq("bowler").sum()        >= 3 else "false"),
+						 "all_rounder_select_more_task_completed"  : ("true" if df['type'].eq("all_rounder").sum()   >= 2 else "false"),
+						 "wicket_keeper_select_more_task_completed": ("true" if df['type'].eq("wicket_keeper").sum() >= 2 else "false"),
+						 "left_players_task_completed"             : ("true" if len(df) == 11 else "false"),
+						 "left_countries_task_completed"           : ("true" if len(df.country.unique()) >= 3 else "false")
 		                 })
