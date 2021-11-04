@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from Login.models import User
 
 def create_user(request):
@@ -18,11 +20,12 @@ def create_user(request):
 	u = User.objects.filter(email=email_address).values()
 	if not u: # if email not found 
 		# Create a user
-		u = User(email=email_address, 
-				 full_name=full_name, 
-				 password=password
-				 )
-		u.save()
+		User.objects.create_user(full_name=full_name, email=email_address, password=password, username=full_name).save()
+		# u = User(email=email_address, 
+		# 		 full_name=full_name, 
+		# 		 password=password
+		# 		 )
+		# u.save()
 		return render(request, 'user_created.html')
 	else: # if email already exists in User table.
 		return render(request, 'email_already_in_use.html')
