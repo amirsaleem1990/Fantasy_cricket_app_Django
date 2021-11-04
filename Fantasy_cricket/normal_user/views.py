@@ -26,12 +26,23 @@ def create_team(request):
 
 
 def my_form(request):
-	# print("------------------------------------")
+
+	print("------------------------------------")
+	print(request.user.username)
+	# for i in dir(request):
+	# 	x = f"request.{i}"
+	# 	try:
+	# 		print("----------------\n\n\n"+i+"\n")
+	# 		print(eval(x))
+	# 	except:
+	# 		pass
+	# print(request.user)
 	# for k,v in dict(request.POST).items():
-		# if k.isdigit():
-			# name, country, type_ = v[0].split("|")
-			# print(k, name, country, type_)
-	# print("------------------------------------")
+	# 	if k.isdigit():
+	# 		name, country, type_ = v[0].split("|")
+	# 		print(k, name, country, type_)
+	
+	print("------------------------------------")
 	return HttpResponse("""<html><body><h1>HY</h1></body></html>""")
 
 
@@ -54,7 +65,7 @@ def ajax_creation_form(request):
 	left_countries_task_completed            = ("true" if len(df.country.unique()) >= 3 else "false")
 	can_submit                               = all([i == "true" for i in [betsman_select_more_task_completed, bowlers_select_more_task_completed, all_rounder_select_more_task_completed, wicket_keeper_select_more_task_completed, left_players_task_completed, left_countries_task_completed] ])
 	can_submit                               = ("true" if can_submit else "false")
-
+	can_submit = "true" # ONLY for testing, remove it immediatly, amir
 
 	return JsonResponse({
 						 "selected_players"          : str(len(df)                                 ),
