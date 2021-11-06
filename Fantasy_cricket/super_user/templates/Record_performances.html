@@ -1,11 +1,14 @@
 <html>
 <body>
 	<h1>Played matches</h1>
-	{% if data %}
-		{% for match in data %}
-			<p>{{ match }}<p>
-		{% endfor %}
-	{% else %}
-		<h1>No match found</h1>
-	{% endif %}
+	<form action="" method="post">
+		{% if data %}
+			{% for match in data %}
+				<a href="record/{{ match.0 }}">{{ match.1 }}</a>
+				<br>
+			{% endfor %}
+		{% else %}
+			<h1>No match found</h1>
+		{% endif %}
+	</form>
 </body>
