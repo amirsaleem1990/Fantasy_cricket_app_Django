@@ -5,6 +5,11 @@ from datetime import datetime
 from operator import itemgetter	
 from .models import *
 import pandas as pd
+import json
+
+def Create_new_country(request):
+	existing_countries = [i['name'] for i in country.objects.values()]
+	return render(request, "super_user/Create_new_country.html", {'existing_countries': ','.join(existing_countries), "existing_countries_list" : existing_countries})
 
 def create_new_country_func(request):
 	"""
