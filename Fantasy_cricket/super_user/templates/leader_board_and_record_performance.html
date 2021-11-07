@@ -65,7 +65,7 @@
 	    }
 	</script>
 
-	<h3><b>{{ data.0 }}</b></h3>
+	<h3><b>{{ data.country_1_name }}</b></h3>
 
 	<div class="row">
 		<div class="column"><p><b>Player</b></p></div>
@@ -79,27 +79,32 @@
 	<form action="/super_user/record_a_score" method="POST" id="score_form">
 
 		{% csrf_token %}
-		<input type="hidden" name="country_1_name" value={{ data.0 }}>
-		<input type="hidden" name="country_2_name" value={{ data.2 }}>
-
-		{% for i in data.1 %}
+		<input type="hidden" name="country_1_name" value={{ data.country_1_name }}>
+		<input type="hidden" name="country_2_name" value={{ data.country_2_name }}>
+		<input type="hidden" name="match_id" value={{ match_id }}>
+		
+		{% for i in data.country_1_players %}
 			<div class="row">
 				<div class="column"><p>{{ i.0 }}</p></div>
 
-				<div class="column" name="{{ data.0 }}|run_scored|{{ i }}">   <p><input placeholder="Enter 0-500" type="text" name="{{ data.0 }}|run_scored|{{ i }}"  maxlength="3" onkeyup="this.value = fnc(this.value, 0, 500)"/></p></div>
-				<div class="column" name="{{ data.0 }}|wickets_taken|{{ i }}"><p><input placeholder="Enter 0-10"  type="text" name="{{ data.0 }}|wickets_taken|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
-				<div class="column" name="{{ data.0 }}|catches|{{ i }}">      <p><input placeholder="Enter 0-10"  type="text" name="{{ data.0 }}|catches|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
+				<div class="column" name="{{ data.country_1_name }}|run_scored|{{ i }}">   <p><input placeholder="Enter 0-500" type="text" name="{{ data.country_1_name }}|run_scored|{{ i }}"  maxlength="3" onkeyup="this.value = fnc(this.value, 0, 500)"/></p></div>
 				{% if i.1 == "wicket_keeper" %}
-					<div class="column" name="{{ data.0 }}|stumps|{{ i }}">   <p><input placeholder="Enter 0-10"  type="text" name="{{ data.0 }}|stumps|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
+					<div class="column" name="{{ data.country_1_name }}|wickets_taken|{{ i }}"><p><input name="{{ data.country_1_name }}|wickets_taken|{{ i }}" disabled></p></div>
 				{% else %}
-					<div class="column" name="{{ data.0 }}|stumps|{{ i }}">   <p><input name="{{ data.0 }}|stumps|{{ i }}" type="text" disabled></p></div>
+					<div class="column" name="{{ data.country_1_name }}|wickets_taken|{{ i }}"><p><input placeholder="Enter 0-10"  type="text" name="{{ data.country_1_name }}|wickets_taken|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
 				{% endif %}
-				<div class="column" name="{{ data.0 }}|total_score|{{ i }}">  <p id="pd2">Total</p></div>
+				<div class="column" name="{{ data.country_1_name }}|catches|{{ i }}">      <p><input placeholder="Enter 0-10"  type="text" name="{{ data.country_1_name }}|catches|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
+				{% if i.1 == "wicket_keeper" %}
+					<div class="column" name="{{ data.country_1_name }}|stumps|{{ i }}">   <p><input placeholder="Enter 0-10"  type="text" name="{{ data.country_1_name }}|stumps|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
+				{% else %}
+					<div class="column" name="{{ data.country_1_name }}|stumps|{{ i }}">   <p><input name="{{ data.country_1_name }}|stumps|{{ i }}" type="text" disabled></p></div>
+				{% endif %}
+				<div class="column" name="{{ data.country_1_name }}|total_score|{{ i }}">  <p id="pd2">Total</p></div>
 			</div>
 		{% endfor %}
 
 		<div class="row">
-			<div class="column"><br><br><br><br><br><br><br><br><h3><b>{{data.2}}</b></h3></div>
+			<div class="column"><br><br><br><br><br><br><br><br><h3><b>{{ data.country_2_name }}</b></h3></div>
 			<div class="column"><br><br><br><br><br><br></div>
 			<div class="column"><br><br><br><br><br><br></div>
 			<div class="column"><br><br><br><br><br><br></div>
@@ -121,17 +126,22 @@
 			<div class="column"><p><b><center>Total score</center></b></p></div>
 		</div> 
 
-		{% for i in data.3 %}
+		{% for i in data.country_2_players %}
 			<div class="row">
 				<div class="column"><p>{{ i.0 }}</p></div>
-				<div class="column" name="{{data.2}}|run_scored|{{ i }}">   <p><input placeholder="Enter 0-500" type="text" name="{{data.2}}|run_scored|{{ i }}"  maxlength="3" onkeyup="this.value = fnc(this.value, 0, 500)"/></p></div>
-				<div class="column" name="{{data.2}}|wickets_taken|{{ i }}"><p><input placeholder="Enter 0-10"  type="text" name="{{data.2}}|wickets_taken|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
-				<div class="column" name="{{data.2}}|catches|{{ i }}">      <p><input placeholder="Enter 0-10"  type="text" name="{{data.2}}|catches|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
+				<div class="column" name="{{data.country_2_name}}|run_scored|{{ i }}">   <p><input placeholder="Enter 0-500" type="text" name="{{data.country_2_name}}|run_scored|{{ i }}"  maxlength="3" onkeyup="this.value = fnc(this.value, 0, 500)"/></p></div>
 				{% if i.1 == "wicket_keeper" %}
-					<div class="column" name="{{data.2}}|stumps|{{ i }}">   <p><input placeholder="Enter 0-10"  type="text" name="{{data.2}}|stumps|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
+					<div class="column" name="{{data.country_2_name}}|wickets_taken|{{ i }}"><p><input name="{{data.country_2_name}}|wickets_taken|{{ i }}" disabled></p></div>
 				{% else %}
-stumps				{% endif %}
-				<div class="column" name="{{data.2}}|total_score|{{ i }}">  <p id="pd2">Total</p></div>
+					<div class="column" name="{{data.country_2_name}}|wickets_taken|{{ i }}"><p><input placeholder="Enter 0-10"  type="text" name="{{data.country_2_name}}|wickets_taken|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
+				{% endif %}
+				<div class="column" name="{{data.country_2_name}}|catches|{{ i }}">      <p><input placeholder="Enter 0-10"  type="text" name="{{data.country_2_name}}|catches|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
+				{% if i.1 == "wicket_keeper" %}
+					<div class="column" name="{{data.country_2_name}}|stumps|{{ i }}">   <p><input placeholder="Enter 0-10"  type="text" name="{{data.country_2_name}}|stumps|{{ i }}"  maxlength="2" onkeyup="this.value = fnc(this.value, 0, 10)"/></p></div>
+				{% else %}
+					<div class="column" name="{{data.country_2_name}}|stumps|{{ i }}">   <p><input name="{{data.country_2_name}}|stumps|{{ i }}" disabled></p></div>
+				{% endif %}
+				<div class="column" name="{{data.country_2_name}}|total_score|{{ i }}">  <p id="pd2">Total</p></div>
 			</div>
 		{% endfor %}
 
