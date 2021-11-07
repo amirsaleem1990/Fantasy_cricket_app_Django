@@ -48,9 +48,6 @@ def create_new_match_func(request):
 	This function is ONLY for super user.
 	super user can crete a new match. this function is providing an information about existing teams.
 	"""
-	# form = {"date" : ':'.join(str(datetime.now()).split(":")[:2]) + ":00",
-			# "Teams" : ['team_1', 'team_2', 'team_3'], 
-			# }
 	countries = [i['name'] for i in country.objects.values()]
 	form = {"Teams" : countries,
 			"date" : str(datetime.now().date())}
@@ -91,19 +88,22 @@ def match_created(request):
 
 
 def record_performance_func(request):
+
 	data = [
 		[
 			f"{i['country_1']}VS{i['country_2']}{'RECORDED' if i['recorded'] else 'NOTRECORDED'}",
-			f"{i['country_1']}  VS {i['country_2']} ({'recorded' if i['recorded'] else 'not recorded'})"
+			f"{i['country_1']}  VS {i['country_2']} ({'recorded' if i['recorded'] else 'not recorded'})",
+			i['id']
 		]
 
-			for i in Matches.objects.values()
+			for i in Matches.objects.order_by("-date").values()
 		]
-	return render(request, "Record_performances.html", {"data" : data})
+	return render(request, "Record_performances.html", {"data" : data, })
 
 
-def leader_board_and_record_performance(request, teams):
+def leader_board_and_record_performance(request, teams, id_):
 	# print("------------------")
+	match_id = id_
 	country_1, x = teams.split("VS")
 	recorded = False
 	if x.endswith("NOTRECORDED"):
@@ -112,45 +112,60 @@ def leader_board_and_record_performance(request, teams):
 		country_2 = x.rstrip("RECORDED")
 		recorded = True
 
-
 	# get ID of country 1 from 'country' table.
 	country_1_id = country.objects.filter(name=country_1).get().id
 	# get ID of country 2 from 'country' table.
 	country_2_id = country.objects.filter(name=country_2).get().id
 
-	# get 'country_1' players from 'Players' table using 'country_1_id'
-	country_1_players = [(i['name'], i['category']) for i in Players.objects.filter(country_id=country_1_id).values()]
-	# get 'country_2' players from 'Players' table using 'country_2_id'
-	country_2_players = [(i['name'], i['category']) for i in Players.objects.filter(country_id=country_2_id).values()]
-
 	if not recorded:
+
+		# get 'country_1' players from 'Players' table using 'country_1_id'
+		country_1_players = [(i['name'], i['category']) for i in Players.objects.filter(country_id=country_1_id).values()]
+		# get 'country_2' players from 'Players' table using 'country_2_id'
+		country_2_players = [(i['name'], i['category']) for i in Players.objects.filter(country_id=country_2_id).values()]
+
 		peram = {
-			"data" : [ country_1, country_1_players, country_2, country_2_players ]
+			"data" : {
+				"country_1_name" : country_1, 
+				"country_2_name" : country_2, 
+				"country_1_players" : country_1_players,
+				"country_2_players" : country_2_players,
+					 },
+			"match_id" : match_id,
+				}
+		return render(request, "leader_board_and_record_performance.html", peram)
+	else:
+		peram = {
+			"data" : {"country_1_players" : [],
+					  "country_2_players" : [],
+					  "country_1_name" : country_1,
+					  "country_2_name" : country_2}
 		}
-
-	# data = Matches.objects.filter(
-	# 	country_1=country_1, 
-	# 	country_2=country_2, 
-	# 	recorded=int(recorded)
-	# 	).values()[0]
-	# id, country_1, country_2, date, created_at, recorded
-
+		for country_id_, country_n_players in zip([country_1_id, country_2_id], ['country_1_players', 'country_2_players']):
+			match_details = Player_score.objects.filter(match_id=match_id, country_id=country_id_).values()
+			for player_ in match_details:
+				peram['data'][country_n_players].append(
+					[player_['player_name'], player_['runs'], player_['wickets'], player_['catches'], player_['stumps'], player_['total']]
+					)
+		return render(request, "leader_board_show_only.html", peram)
 	# return HttpResponse("HI")
-	return render(request, "leader_board_and_record_performance.html", peram)
 
 
 
 
 def record_a_score_func(request):
+
 	data = request.POST.dict()
-	data.pop("csrfmiddlewaretoken")
-	data = {k:(0 if not v else int(v.strip())) for k,v in data.items() if not k in ['country_1_name', 'country_2_name']}
+	
+	match_id = data['match_id']
+	country_1_name = data['country_1_name']
+	country_2_name = data['country_2_name']
+
+	data = {k:(0 if not v else int(v.strip())) for k,v in data.items() if not k in ['csrfmiddlewaretoken', 'country_1_name', 'country_2_name', 'match_id']}
 	players = {}
-	# lst = []
 	for k,v in data.items():
 		country_, field_, x = k.split("|")
 		player_, player_type = eval(x)
-		# lst.append([country_, field_, player_, player_type, v])
 		p = player_ + "|" + country_
 		if not p in players:
 			players[p] = {}
@@ -159,12 +174,12 @@ def record_a_score_func(request):
 
 		player_, country_ = k.split("|")
 		runs    = v['run_scored']
-		wickets = v['wickets_taken']
+		wickets = (v['wickets_taken'] if 'wickets_taken' in v else 0)
 		catches = v['catches']
 		stumps  = (v['stumps'] if 'stumps' in v else 0)
 
 		Player_score(
-			match_id    = Matches.objects.filter(country_1 = request.POST['country_1_name'], country_2 = request.POST['country_2_name'], recorded=0)[0].id, #get().id ,
+			match_id    = Matches.objects.filter(country_1 = country_1_name, country_2 = country_2_name, recorded=0)[0].id, #get().id ,
 			player_id   = Players.objects.filter(name=player_ ).get().id ,
 			country_id  = country.objects.filter(name=country_).get().id ,
 			player_name = player_,
@@ -176,7 +191,7 @@ def record_a_score_func(request):
 			).save()
 
 
-	# Add an entry in Matches table that this match is recorded.
+	Matches.objects.filter(id=match_id).update(recorded=1)
 
 	return HttpResponse("record_a_score_func called")
 

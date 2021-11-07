@@ -1,0 +1,94 @@
+<html>
+<head>
+	<style type="text/css">
+		.column {
+		  float: left;
+		  width: 15%;
+		}
+
+		/* Clear floats after the columns */
+		.row:after {
+		  display: table;
+		  clear: both;
+		}
+
+		#pd {
+			padding: 10px; 
+			border: 1px solid lightgray; 
+			width: 250px;
+			height:  10px;
+			text-align: center;
+			font-size: 15px;	
+		}
+
+		#pd2 {
+		  width: 220px;
+		  border: 1px solid black;
+		  padding: 5px;
+		  height: 10px;
+		  text-align: center;
+		}
+	</style>
+</head>
+<body>
+
+	<h3><b>{{ data.country_1_name }}</b></h3>
+
+	<div class="row">
+		<div class="column"><p><b>Player</b></p></div>
+		<div class="column"><p><b><center>Run scored</center></b></p></div>
+		<div class="column"><p><b><center>Wickets taken</center></b></p></div>
+		<div class="column"><p><b><center>Catches</center></b></p></div>
+		<div class="column"><p><b><center>Stumps</center></b></p></div>
+		<div class="column"><p><b><center>Total score</center></b></p></div>
+	</div> 
+
+	
+	{% for i in data.country_1_players %}
+		<div class="row">
+			<div class="column"><p        >{{ i.0 }}</p></div>
+			<div class="column"><p id="pd">{{ i.1 }}</p></div>
+			<div class="column"><p id="pd">{{ i.2 }}</p></div>
+			<div class="column"><p id="pd">{{ i.3 }}</p></div>
+			<div class="column"><p id="pd">{{ i.4 }}</p></div>
+			<div class="column"><p id="pd">{{ i.5 }}</p></div>
+		</div>
+	{% endfor %}
+
+	<div class="row">
+		<div class="column"><br><br><br><br><br><br><br><br><h3><b>{{ data.country_2_name }}</b></h3></div>
+		<div class="column"><br><br><br><br><br><br></div>
+		<div class="column"><br><br><br><br><br><br></div>
+		<div class="column"><br><br><br><br><br><br></div>
+		<div class="column"><br><br><br><br><br><br></div>
+		<div class="column"><br><br><br><br><br><br></div>
+		<div class="column"><br><br><br><br><br><br></div>
+		<div class="column"><br><br><br><br><br><br></div>
+		<div class="column"><br><br><br><br><br><br></div>
+		<div class="column"><br><br><br><br><br><br></div>
+		<div class="column"><br><br><br><br><br><br></div>
+	</div>
+
+	<div class="row">
+		<div class="column"><p><b>Player</b></p></div>
+		<div class="column"><p><b><center>Run scored</center></b></p></div>
+		<div class="column"><p><b><center>Wickets taken</center></b></p></div>
+		<div class="column"><p><b><center>Catches</center></b></p></div>
+		<div class="column"><p><b><center>Stumps</center></b></p></div>
+		<div class="column"><p><b><center>Total score</center></b></p></div>
+	</div> 
+
+	{% for i in data.country_2_players %}
+		<div class="row">
+			<div class="column"><p        >{{ i.0 }}</p></div>
+			<div class="column"><p id="pd">{{ i.1 }}</p></div>
+			<div class="column"><p id="pd">{{ i.2 }}</p></div>
+			<div class="column"><p id="pd">{{ i.3 }}</p></div>
+			<div class="column"><p id="pd">{{ i.4 }}</p></div>
+			<div class="column"><p id="pd">{{ i.5 }}</p></div>
+		</div>
+	{% endfor %}
+
+	<br><br>
+</body>
+</html>
