@@ -4,7 +4,7 @@
 	<form action="" method="post">
 		{% if data %}
 			{% for match in data %}
-				<a href="record/{{ match.0 }}">{{ match.1 }}</a>
+				<a href="record/{{ match.0 }}/{{match.2}}">{{ match.1 }}</a>
 				<br>
 			{% endfor %}
 		{% else %}
