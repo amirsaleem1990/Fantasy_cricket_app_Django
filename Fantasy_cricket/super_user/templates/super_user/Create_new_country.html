@@ -1,68 +1,75 @@
 <!DOCTYPE html>
 <html>
 	<title>TITLE</title>
-	<head>
-	</head>
 	<body>
-		<h1>Create new Country</h1>
-		<h4>INSTRUCTIONS:
-			<p>- A country should have one player from each type of player. That is, you cannot make a country team with only batsmen and bowlers. But you can make a country which has 5 wicket keepers, 2 batsmen, 2 bowlers and 2 all rounders. As long as there are players from each type of the player then the country is valid.</p>
-			<p>- Country name should be unique</p>
-		</h2>
 
-	
+	    <script type="text/javascript">
+		    function fnc(value) {
+		    	var existing_countries = '{{existing_countries}}'.split(',');
+				for(i = 0; i < existing_countries.length; i++){
+					if (existing_countries.includes(value) | (value === "")){
+						document.getElementById("country_name").style.background = "red";
+						 document.getElementById("submit").disabled = true; 
+					}else{
+					    document.getElementById("country_name").style.background = "lightgreen"; 
+						 document.getElementById("submit").disabled = false; 
+					};
+				};
+		    	return value;
+		    }
+		</script>
+
+		<h1>Create new Country</h1>
+		<br>
+		<p style="font-size: 12px;">*You can't choose a country name existing in list</p>
+		<br>
+		
 		<form action="super_user/create_new_country" method="post">
 			
 			{% csrf_token %}
 
 			<label for="country_name">Country Name</label>
-			<input type="text" placeholder="required" id="country_name" name="country_name" required><br><br>
+			<input list="country_name_" onkeyup="this.value = fnc(this.value)" type="text" placeholder="required" id="country_name" name="country_name" autofocus required style="background-color: red;">
+			<datalist id="country_name_">
+				{% for i in existing_countries_list %}
+					<option value={{i}}>
+				{% endfor %}
+			</datalist>
+			<br><br>
 			<br><br>
 
 
 			<label for="playerName_1">Player 1&ensp;</label>
-			<input type="text" placeholder="required" id="playerName_1" name="playerName_1" required>
-			<select id="player_1" name="player_1">
+			<input type="text" placeholder="required batsman" id="playerName_1" name="playerName_1" required>
+			<select style="width: 115px;" id="player_1" name="player_1">
 				<option value="batsman">Batsman</option>
-				<option value="bowler">Bowler</option>
-				<option value="all_rounder">All rounder</option>
-				<option value="wicket_keeper">Wicket keeper</option>
 			</select>
 			<br>
             
 			<label for="playerName_2">Player 2&ensp;</label>
-			<input type="text" placeholder="required" id="playerName_2" name="playerName_2" required>
-			<select id="player_2" name="player_2">
-				<option value="batsman">Batsman</option>
+			<input type="text" placeholder="required bowler" id="playerName_2" name="playerName_2" required>
+			<select style="width: 115px;" id="player_2" name="player_2">
 				<option value="bowler">Bowler</option>
-				<option value="all_rounder">All rounder</option>
-				<option value="wicket_keeper">Wicket keeper</option>
 			</select>
 			<br>
             
 			<label for="playerName_3">Player 3&ensp;</label>
-			<input type="text" placeholder="required" id="playerName_3" name="playerName_3" required>
-			<select id="player_3" name="player_3">
-				<option value="batsman">Batsman</option>
-				<option value="bowler">Bowler</option>
+			<input type="text" placeholder="required all_rounder" id="playerName_3" name="playerName_3" required>
+			<select style="width: 115px;" id="player_3" name="player_3">
 				<option value="all_rounder">All rounder</option>
-				<option value="wicket_keeper">Wicket keeper</option>
 			</select>
 			<br>
             
 			<label for="playerName_4">Player 4&ensp;</label>
-			<input type="text" placeholder="required" id="playerName_4" name="playerName_4" required>
-			<select id="player_4" name="player_4">
-				<option value="batsman">Batsman</option>
-				<option value="bowler">Bowler</option>
-				<option value="all_rounder">All rounder</option>
+			<input type="text" placeholder="required wicket_keeper" id="playerName_4" name="playerName_4" required>
+			<select style="width: 115px;" id="player_4" name="player_4">
 				<option value="wicket_keeper">Wicket keeper</option>
 			</select>
 			<br>
             
 			<label for="playerName_5">Player 5&ensp;</label>
 			<input type="text" placeholder="required" id="playerName_5" name="playerName_5" required>
-			<select id="player_5" name="player_5">
+			<select style="width: 115px;" id="player_5" name="player_5">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -72,7 +79,7 @@
             
 			<label for="playerName_6">Player 6&ensp;</label>
 			<input type="text" placeholder="required" id="playerName_6" name="playerName_6" required>
-			<select id="player_6" name="player_6">
+			<select style="width: 115px;" id="player_6" name="player_6">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -82,7 +89,7 @@
             
 			<label for="playerName_7">Player 7&ensp;</label>
 			<input type="text" placeholder="required" id="playerName_7" name="playerName_7" required>
-			<select id="player_7" name="player_7">
+			<select style="width: 115px;" id="player_7" name="player_7">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -92,7 +99,7 @@
             
 			<label for="playerName_8">Player 8&ensp;</label>
 			<input type="text" placeholder="required" id="playerName_8" name="playerName_8" required>
-			<select id="player_8" name="player_8">
+			<select style="width: 115px;" id="player_8" name="player_8">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -102,7 +109,7 @@
             
 			<label for="playerName_9">Player 9&ensp;</label>
 			<input type="text" placeholder="required" id="playerName_9" name="playerName_9" required>
-			<select id="player_9" name="player_9">
+			<select style="width: 115px;" id="player_9" name="player_9">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -112,7 +119,7 @@
             
 			<label for="playerName_10">Player 10</label>
 			<input type="text" placeholder="required" id="playerName_10" name="playerName_10" required>
-			<select id="player_10" name="player_10">
+			<select style="width: 115px;" id="player_10" name="player_10">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -122,7 +129,7 @@
             
 			<label for="playerName_11">Player 11</label>
 			<input type="text" placeholder="required" id="playerName_11" name="playerName_11" required>
-			<select id="player_11" name="player_11">
+			<select style="width: 115px;" id="player_11" name="player_11">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -132,7 +139,7 @@
             
 			<label for="playerName_12">Player 12</label>
 			<input type="text" placeholder="optional" id="playerName_12" name="playerName_12">
-			<select id="player_12" name="player_12">
+			<select style="width: 115px;" id="player_12" name="player_12">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -142,7 +149,7 @@
             
 			<label for="playerName_13">Player 13</label>
 			<input type="text" placeholder="optional" id="playerName_13" name="playerName_13">
-			<select id="player_13" name="player_13">
+			<select style="width: 115px;" id="player_13" name="player_13">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -152,7 +159,7 @@
 
 			<label for="playerName_14">Player 14</label>
 			<input type="text" placeholder="optional" id="playerName_14" name="playerName_14">
-			<select id="player_14" name="player_14">
+			<select style="width: 115px;" id="player_14" name="player_14">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -162,7 +169,7 @@
 
 			<label for="playerName_15">Player 15</label>
 			<input type="text" placeholder="optional" id="playerName_15" name="playerName_15">
-			<select id="player_15" name="player_15">
+			<select style="width: 115px;" id="player_15" name="player_15">
 				<option value="batsman">Batsman</option>
 				<option value="bowler">Bowler</option>
 				<option value="all_rounder">All rounder</option>
@@ -170,8 +177,9 @@
 			</select>
 			<br>
 
-		<input type="submit" value="Submit">
+		<input type="submit" id="submit" value="Submit" disabled>
 		</form>
+
 	</body>
 </html>
 

@@ -9,4 +9,5 @@ urlpatterns = [
     url("record_performance",      record_performance_func ,            name="record_performance" ),
     path('/record/<slug:teams>/<int:id_>/',  leader_board_and_record_performance, name="leader_board_and_record_performance"),
     url("record_a_score",          record_a_score_func,                 name="record_a_score"),
+    url("Create_new_country",      Create_new_country,                  name="Create_new_country" ),
 ]
