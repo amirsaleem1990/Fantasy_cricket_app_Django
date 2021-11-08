@@ -26,9 +26,9 @@ urlpatterns = [
     
     url("login",               include("Login.urls")      ),
     url("signup_",             include("signup.urls")     ),
+    url("normal_user/",        include("normal_user.urls")),
     url("super_user",          include("super_user.urls") ),
     url("create_new_match",    include("super_user.urls") ),
-    url("normal_user/",        include("normal_user.urls")),
     url("Create_new_country",  include("super_user.urls") ),
     
 ]
