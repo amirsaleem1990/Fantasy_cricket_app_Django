@@ -1,16 +1,23 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 from datetime import datetime
 from operator import itemgetter	
 from .models import *
-import pandas as pd
-import json
+from django.contrib.auth.decorators import *
 
+# def check_admin(user):
+   # return user.is_superuser
+# @user_passes_test(check_admin)
+
+
+@user_passes_test(lambda u:u.is_staff)
 def Create_new_country(request):
 	existing_countries = [i['name'] for i in country.objects.values()]
 	return render(request, "super_user/Create_new_country.html", {'existing_countries': ','.join(existing_countries), "existing_countries_list" : existing_countries})
 
+
+@user_passes_test(lambda u:u.is_staff)
 def create_new_country_func(request):
 	"""
 	This function is ONLY for super user, using this function he will create a new countries.
@@ -29,11 +36,12 @@ def create_new_country_func(request):
 	for player_name, category in zip(
 		[playerName_1, playerName_2, playerName_3, playerName_4, playerName_5, playerName_6, playerName_7, playerName_8, playerName_9, playerName_10, playerName_11, playerName_12, playerName_13, playerName_14, playerName_15],
 		[player_1, player_2, player_3, player_4, player_5, player_6, player_7, player_8, player_9, player_10, player_11, player_12, player_13, player_14, player_15]): 
-		if player_name and category:
-			Players(country_id = country.objects.filter(name=country_name).values()[0]['id'],
-				   name = player_name,
-				   category = category
-				   ).save()
+		if player_name:
+			Players(
+				country_id = country.objects.filter(name=country_name).values()[0]['id'],
+				name = player_name,
+				category = category
+				).save()
 
 	return HttpResponse("""<html>
 								<body>
@@ -41,13 +49,14 @@ def create_new_country_func(request):
 
 									<br><br>
 
-									<a href="/Create_new_country"><button>Create a new country</button></a>
+									<a href="/super_user/Create_new_country"><button>Create a new country</button></a>
 									<a href="/login"><button>Go to main page</button></a>
 
 								</body>
 						   </html>""")
 
 
+@user_passes_test(lambda u:u.is_staff)
 def create_new_match_func(request):
 	"""
 	This function is ONLY for super user.
@@ -78,6 +87,8 @@ def load_cities(request):
 	return render(request, 'super_user/dropdown_list_options.html', {'possible_second_countries': possible_second_countries})
 
 
+
+@user_passes_test(lambda u:u.is_staff)
 def match_created(request):
 	
 	new_match = Matches(
@@ -91,7 +102,7 @@ def match_created(request):
 	return render(request, 'super_user/match_created.html')
 
 
-
+@user_passes_test(lambda u:u.is_staff)
 def record_performance_func(request):
 
 	data = [
@@ -103,9 +114,11 @@ def record_performance_func(request):
 
 			for i in Matches.objects.order_by("-date").values()
 		]
-	return render(request, "Record_performances.html", {"data" : data, })
+	return render(request, "Record_performances.html", {"data" : data })
 
 
+
+@user_passes_test(lambda u:u.is_staff)
 def leader_board_and_record_performance(request, teams, id_):
 	# print("------------------")
 	match_id = id_
@@ -157,7 +170,7 @@ def leader_board_and_record_performance(request, teams, id_):
 
 
 
-
+@user_passes_test(lambda u:u.is_staff)
 def record_a_score_func(request):
 
 	data = request.POST.dict()
@@ -182,26 +195,50 @@ def record_a_score_func(request):
 		wickets = (v['wickets_taken'] if 'wickets_taken' in v else 0)
 		catches = v['catches']
 		stumps  = (v['stumps'] if 'stumps' in v else 0)
+		
+		country_id = country.objects.filter(name=country_).get().id
 
 		Player_score(
 			match_id    = Matches.objects.filter(country_1 = country_1_name, country_2 = country_2_name, recorded=0)[0].id, #get().id ,
-			player_id   = Players.objects.filter(name=player_ ).get().id ,
-			country_id  = country.objects.filter(name=country_).get().id ,
+			player_id   = Players.objects.filter(name=player_, country_id=country_id).get().id ,
+			country_id  = country_id,
 			player_name = player_,
 			runs        = runs, 
 			wickets     = wickets, 
 			catches     = catches, 
 			stumps      = stumps,
-			total       = runs + wickets + catches + stumps
+			total       = runs + wickets*10 + catches*10 + stumps*15
 			).save()
 
 
 	Matches.objects.filter(id=match_id).update(recorded=1)
 
-	return HttpResponse("record_a_score_func called")
+	return HttpResponse("Successfully scored!")
 
 
 
 
+def calculate_score(x):
+    type_ = x.split("|")[1]
+    if type_  == "catches":
+        return 10
+    elif type_ == "run_scored":
+        return 1
+    elif type_ == "wickets_taken":
+        return 10
+    elif type_ == "stumps":
+        return 15
 
+
+@user_passes_test(lambda u:u.is_staff)
+def ajax_score_form(request):
+	peram = {}
+	data = {k:(0 if not v else int(v.strip())) for k,v in request.GET.items() if not k in ['csrfmiddlewaretoken', 'country_1_name', 'country_2_name', 'match_id']}
+	for key,value in data.items(): 
+		total_score = f'{key.split("|")[0]}|total_score|{key.split("|")[2]}'
+		if not total_score in peram:
+			peram[total_score] = 0
+		peram[total_score] += calculate_score(key)*value
+	print(peram)
+	return JsonResponse(peram)
 
