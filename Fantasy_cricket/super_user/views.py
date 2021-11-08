@@ -197,7 +197,6 @@ def record_a_score_func(request):
 		stumps  = (v['stumps'] if 'stumps' in v else 0)
 		
 		country_id = country.objects.filter(name=country_).get().id
-
 		Player_score(
 			match_id    = Matches.objects.filter(country_1 = country_1_name, country_2 = country_2_name, recorded=0)[0].id, #get().id ,
 			player_id   = Players.objects.filter(name=player_, country_id=country_id).get().id ,
@@ -239,6 +238,5 @@ def ajax_score_form(request):
 		if not total_score in peram:
 			peram[total_score] = 0
 		peram[total_score] += calculate_score(key)*value
-	print(peram)
 	return JsonResponse(peram)
 
