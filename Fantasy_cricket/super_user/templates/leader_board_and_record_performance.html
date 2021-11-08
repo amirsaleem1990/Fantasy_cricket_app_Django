@@ -33,7 +33,7 @@
 		  cursor: pointer;
 		}
 
-		#pd2 {
+		.pd2 {
 		  width: 220px;
 		  border: 1px solid black;
 		  padding: 5px;
@@ -76,7 +76,7 @@
 		<div class="column"><p><b><center>Total score</center></b></p></div>
 	</div> 
 
-	<form action="/super_user/record_a_score" method="POST" id="score_form">
+	<form action="/super_user/record_a_score" method="POST" id="score_form" id="score_record_form" score-form-url="{% url 'ajax_score_form' %}">
 
 		{% csrf_token %}
 		<input type="hidden" name="country_1_name" value={{ data.country_1_name }}>
@@ -99,7 +99,7 @@
 				{% else %}
 					<div class="column" name="{{ data.country_1_name }}|stumps|{{ i }}">   <p><input name="{{ data.country_1_name }}|stumps|{{ i }}" type="text" disabled></p></div>
 				{% endif %}
-				<div class="column" name="{{ data.country_1_name }}|total_score|{{ i }}">  <p id="pd2">Total</p></div>
+				<div class="column" name="{{ data.country_1_name }}|total_score|{{ i }}">  <p class="pd2" id="{{ data.country_1_name }}|total_score|{{ i }}">0</p></div>
 			</div>
 		{% endfor %}
 
@@ -141,7 +141,7 @@
 				{% else %}
 					<div class="column" name="{{data.country_2_name}}|stumps|{{ i }}">   <p><input name="{{data.country_2_name}}|stumps|{{ i }}" disabled></p></div>
 				{% endif %}
-				<div class="column" name="{{data.country_2_name}}|total_score|{{ i }}">  <p id="pd2">Total</p></div>
+				<div class="column" name="{{data.country_2_name}}|total_score|{{ i }}">  <p class="pd2" id="{{ data.country_2_name }}|total_score|{{ i }}">0</p></div>
 			</div>
 		{% endfor %}
 
@@ -154,6 +154,24 @@
 		</div>
 
 	</form>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+
+		$( 'form' ).change(function(e) {
+		    var data = $('form').serialize();
+		            $.ajax({
+		                url: 'ajax_score_form',
+		                data: data,
+		                success: function(data) {
+		                	for (var prop in data) {
+								document.getElementById(prop).innerHTML = data[prop];
+							}
+						}
+					});
+		        });
+	</script>
+
 	<br><br>
 	<br><br>
 </body>
