@@ -4,8 +4,23 @@ from django.http import HttpResponse
 import pandas as pd
 from django.db import connection
 from django.http import JsonResponse
+from datetime import datetime
+from .models import *
+from Login.models import User
+from django.contrib.auth.decorators import *
 
+
+def check_normal_user(user):
+   return not user.is_superuser
+
+
+@user_passes_test(check_normal_user)
 def create_team(request):
+	# print("====================================")
+	# print(request.user.id)
+	# print("====================================")
+	if Teams.objects.filter(user_id=request.user.id):
+		return HttpResponse("You team is already created!")
 	cursor = connection.cursor()
 
 	data = cursor.execute('''
@@ -24,28 +39,27 @@ def create_team(request):
 	return render(request, "create_team.html", param)
 
 
-
+@user_passes_test(check_normal_user)
 def my_form(request):
 
-	print("------------------------------------")
-	print(request.user.username)
-	# for i in dir(request):
-	# 	x = f"request.{i}"
-	# 	try:
-	# 		print("----------------\n\n\n"+i+"\n")
-	# 		print(eval(x))
-	# 	except:
-	# 		pass
-	# print(request.user)
-	# for k,v in dict(request.POST).items():
-	# 	if k.isdigit():
-	# 		name, country, type_ = v[0].split("|")
-	# 		print(k, name, country, type_)
-	
-	print("------------------------------------")
-	return HttpResponse("""<html><body><h1>HY</h1></body></html>""")
+	# print("------------------------------------")
+	for k,v in dict(request.POST).items():
+		if k.isdigit():
+			name, country_, type_ = v[0].split("|")
+			country_id = country.objects.filter(name=country_).get().id
+			Team_players(
+				player_id_in_original_table = Players.objects.filter(name=name, country_id=country_id).values()[0]['id'],
+				user_id = request.user.id
+				).save()
+
+	Teams(
+		user_id=request.user.id, 
+		created_at=':'.join(str(datetime.now()).split(":")[:2]) + ":00"
+		).save()
+	return HttpResponse("""<html><body><h1>Your team creates successfully</h1></body></html>""")
 
 
+@user_passes_test(check_normal_user)
 def ajax_creation_form(request):
 	# print("------------------------------------")
 	lst = []
@@ -60,17 +74,16 @@ def ajax_creation_form(request):
 	betsman_select_more_task_completed       = ("true" if df['type'].eq("batsman").sum()       >= 3 else "false")
 	bowlers_select_more_task_completed       = ("true" if df['type'].eq("bowler").sum()        >= 3 else "false")
 	all_rounder_select_more_task_completed   = ("true" if df['type'].eq("all_rounder").sum()   >= 2 else "false")
-	wicket_keeper_select_more_task_completed = ("true" if df['type'].eq("wicket_keeper").sum() >= 2 else "false")
+	wicket_keeper_select_more_task_completed = ("true" if df['type'].eq("wicket_keeper").sum() >= 1 else "false")
 	left_players_task_completed              = ("true" if len(df) == 11 else "false")
 	left_countries_task_completed            = ("true" if len(df.country.unique()) >= 3 else "false")
 	can_submit                               = all([i == "true" for i in [betsman_select_more_task_completed, bowlers_select_more_task_completed, all_rounder_select_more_task_completed, wicket_keeper_select_more_task_completed, left_players_task_completed, left_countries_task_completed] ])
 	can_submit                               = ("true" if can_submit else "false")
-	can_submit = "true" # ONLY for testing, remove it immediatly, amir
-
+	# can_submit = "true"
 	return JsonResponse({
 						 "selected_players"          : str(len(df)                                 ),
-		                 "left_players"              : str(11 - len(df)                            ),
-		                 "betsman_select_more"       : str(3 - df['type'].eq("batsman").sum()      ),
+		             "left_players"              : str(11 - len(df)                            ),
+		             "betsman_select_more"       : str(3 - df['type'].eq("batsman").sum()      ),
 						 "bowlers_select_more"       : str(3 - df['type'].eq("bowler").sum()       ),
 						 "all_rounder_select_more"   : str(2 - df['type'].eq("all_rounder").sum()  ),
 						 "wicket_keeper_select_more" : str(1 - df['type'].eq("wicket_keeper").sum()),
@@ -86,3 +99,5 @@ def ajax_creation_form(request):
 						 "left_countries_task_completed"           : left_countries_task_completed ,
 						 "can_submit"                              : can_submit,
 		                 })
+
+

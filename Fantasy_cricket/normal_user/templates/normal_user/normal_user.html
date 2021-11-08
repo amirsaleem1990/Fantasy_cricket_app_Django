@@ -41,13 +41,15 @@
                             </div>
                         </a>
 
-                        <a href="/normal_user/create_team" class="">
-                            <div class="text-block three_row">
-                                <div class="image-container">
-                                    <img class="three_images" data-image="{% static 'pics/create_team.png' %}" src="{% static 'pics/create_team.png' %}" alt="">
+                        {% if not teams_exist %}
+                            <a href="/normal_user/create_team" class="">
+                                <div class="text-block three_row">
+                                    <div class="image-container">
+                                        <img class="three_images" data-image="{% static 'pics/create_team.png' %}" src="{% static 'pics/create_team.png' %}" alt="">
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </section>        
