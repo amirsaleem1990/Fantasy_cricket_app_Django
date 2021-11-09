@@ -104,10 +104,8 @@ def ajax_creation_form(request):
 		                 })
 
 
-@user_passes_test(check_normal_user)
-def team_performance(request):
-	
-	user_id = request.user.id
+def get_user_team_score(user_id):
+
 	team_created_at = Teams.objects.filter(user_id=user_id).get().created_at
 	matches_to_consider_ids = [i['id'] for i in Matches.objects.filter(created_at__lte=team_created_at, recorded=1).values()]
 
@@ -120,7 +118,13 @@ def team_performance(request):
 			lst.append(i)
 	df = pd.DataFrame(lst).groupby('player_id').sum().loc[:, "runs" : "total"].reset_index()
 	df['name'] = df.player_id.apply(lambda x:Players.objects.filter(id=x).get().name)
-	total = df.total.sum()
+	return df
+
+@user_passes_test(check_normal_user)
+def team_performance(request):
+	
+	user_id = request.user.id
+	df = get_user_team_score(user_id)
 	#    player_id  runs  wickets  catches  stumps  total  name
 	# 0        196    20        1        5       0     26   p_2
 	# 1        197     4        9        2       0     15   p_3
@@ -130,6 +134,7 @@ def team_performance(request):
 	# 5        207     1        1        3       0      5  p_12
 	# 6        208     1        5        8       0     14  p_13
 	# 7        209    12        0        3       4     19  p_14
+	total = df.total.sum()
 	data = df.apply(pd.Series.to_list, axis=1).to_list()
 	# [[196, 20, 1, 5, 0, 26, 'p_2'],
 	#  [197, 4, 9, 2, 0, 15, 'p_3'],
@@ -146,4 +151,44 @@ def team_performance(request):
 
 @user_passes_test(check_normal_user)
 def leader_board(request):
-	return render(request, "leader_board.html")
+	# users_ids = [i['user_id'] for i in Teams.objects.values()]
+
+	my_user_id = request.user.id
+	
+	# data = {user_id : get_user_team_score(user_id).total.sum() for user_id in users_ids}
+	# data = list(enumerate(sorted(data.items(), key=lambda x:x[1], reverse=True), start=1))       
+	 # [
+	 # (9, (4, 8)),
+	 # (8, (6, 7)),
+	 # (7, (1, 5)),
+	 # (6, (5, 5)),
+	 # (5, (8, 4)),
+	 # (4, (3, 3)),
+	 # (3, (2, 3)),
+	 # (2, (0, 2)),
+	 # (1, (7, 2)),
+	 # (0, (9, 0))
+	 # ]
+	data = [
+	(1, (21, 1433)),
+	(2, (20, 1420)),
+	(3, (15, 1333)),
+	(4, (14, 1200)),
+	(5, (19, 1100)),
+	(6, (16, 1099)),
+	(7, (11, 1095)),
+	(8, (13, 1050)),
+	(9, (12, 1000)),
+	(10, (22, 999)),
+	(11, (18, 998))
+	]
+
+	my_data = [i for i in data if i[1][0] == my_user_id][0]
+
+	peram = {
+				"data" : data,
+				"total_score" : data, 
+				"your_score" : my_data[1][1],
+				"your_position" : my_data[0]
+				}
+	return render(request, "leader_board.html", peram)
