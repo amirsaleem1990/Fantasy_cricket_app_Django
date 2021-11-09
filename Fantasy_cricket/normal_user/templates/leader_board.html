@@ -52,6 +52,18 @@
 				{% endif %}
 			{% endif %}
 		{% endfor %}
+
+		<div>
+			<span>
+				{% if data.has_previous %}
+					<a href="?page={{data.previous_page_number}}">Previous</a>
+				{% endif %}
+					<span>{{ data.number }}</span>
+				{% if data.has_next %}
+					<a href="?page={{data.next_page_number}}">Next</a>
+				{% endif %}
+			</span>
+		</div>
 	</table>
 </body>
 </html>
