@@ -1,17 +1,17 @@
+# from django.core import paginator
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import *
+from django.db import connection
+from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from super_user.models import *
-from django.http import HttpResponse
 import pandas as pd
-from django.db import connection
-from django.http import JsonResponse
-from datetime import datetime
-from .models import *
-from Login.models import User
-from django.contrib.auth.decorators import *
-from functools import reduce
 import operator
-from django.db.models import Q
-
+from datetime import datetime
+from Login.models import User
+from .models import *
+from functools import reduce
 
 def check_normal_user(user):
    return not user.is_superuser
@@ -151,12 +151,12 @@ def team_performance(request):
 
 @user_passes_test(check_normal_user)
 def leader_board(request):
-	# users_ids = [i['user_id'] for i in Teams.objects.values()]
+	users_ids = [i['user_id'] for i in Teams.objects.values()]
 
 	my_user_id = request.user.id
 	
-	# data = {user_id : get_user_team_score(user_id).total.sum() for user_id in users_ids}
-	# data = list(enumerate(sorted(data.items(), key=lambda x:x[1], reverse=True), start=1))       
+	data = {user_id : get_user_team_score(user_id).total.sum() for user_id in users_ids}
+	data = list(enumerate(sorted(data.items(), key=lambda x:x[1], reverse=True), start=1))       
 	 # [
 	 # (9, (4, 8)),
 	 # (8, (6, 7)),
@@ -169,6 +169,8 @@ def leader_board(request):
 	 # (1, (7, 2)),
 	 # (0, (9, 0))
 	 # ]
+
+	# dummy data
 	data = [
 	(1, (21, 1433)),
 	(2, (20, 1420)),
@@ -185,10 +187,16 @@ def leader_board(request):
 
 	my_data = [i for i in data if i[1][0] == my_user_id][0]
 
+	# https://www.youtube.com/watch?v=Z1A0TdZzDkE
+	paginator = Paginator(data, 3)
+	page_number = request.GET.get('page')
+	page_obj = paginator.get_page(page_number)
+
 	peram = {
-				"data" : data,
+				"data" : page_obj,
 				"total_score" : data, 
 				"your_score" : my_data[1][1],
 				"your_position" : my_data[0]
 				}
+
 	return render(request, "leader_board.html", peram)
