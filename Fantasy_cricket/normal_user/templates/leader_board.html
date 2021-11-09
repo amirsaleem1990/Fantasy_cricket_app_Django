@@ -1,4 +1,21 @@
 <html>
+<head>
+	<style>
+		table, th, td {
+			border:1px solid black;
+		}
+		table {
+			background-color: powderblue; 
+		}
+		.center {
+			margin-left: auto;
+			margin-right: auto;
+		}
+		td {
+			font-size: 20px
+		}
+	</style>
+</head>
 <body>
 	<h1>Leader board</h1>
 	<p>Your position: {{ your_position }}</p>
@@ -6,6 +23,35 @@
 	<br>
 	<hr>
 	<br>
-	
+	<table class="center" style="width:50%;">
+		<tr>
+			<td width="10%" style="background-color: DimGray;"><center>Position</center></td>
+			<td width="50%" style="background-color: DimGray;"><center>Name    </center></td>
+			<td width="25%" style="background-color: DimGray;"><center>Score   </center></td>
+		</tr>
+		{% for i in data %}
+			{% if i.0 == your_position %}
+				<tr>
+					<td width="10%" style="background-color: red;"><center>{{i.0}}  </center></td>
+					<td width="50%" style="background-color: red;"><center>{{i.1.0}}</center></td>
+					<td width="25%" style="background-color: red;"><center>{{i.1.1}}</center></td>
+				</tr>
+			{% else %}
+				{% if i.0|divisibleby:2 %}
+					<tr>
+						<td width="10%"><center>{{i.0}}  </center></td>
+						<td width="50%"><center>{{i.1.0}}</center></td>
+						<td width="25%"><center>{{i.1.1}}</center></td>
+					</tr>
+				{% else %}
+					<tr>
+						<td width="10%" style="background-color: white;"><center>{{i.0}}  </center></td>
+						<td width="50%" style="background-color: white;"><center>{{i.1.0}}</center></td>
+						<td width="25%" style="background-color: white;"><center>{{i.1.1}}</center></td>
+					</tr>
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+	</table>
 </body>
 </html>
