@@ -104,18 +104,21 @@ def ajax_creation_form(request):
 		                 })
 
 
-def get_user_team_score(user_id):
-
-	team_created_at = Teams.objects.filter(user_id=user_id).get().created_at
+def get_user_team_score(my_user_id):
+	x = Teams.objects.filter(user_id=my_user_id)
+	if not bool(x):
+		return "You're not created you team yet, Please create you team first"
+	team_created_at = x.get().created_at
 	matches_to_consider_ids = [i['id'] for i in Matches.objects.filter(created_at__lte=team_created_at, recorded=1).values()]
 
-	players_ids = [i['player_id_in_original_table'] for i in Team_players.objects.filter(user_id=user_id).values()]
+	players_ids = [i['player_id_in_original_table'] for i in Team_players.objects.filter(user_id=my_user_id).values()]
 	players = Player_score.objects.filter(reduce(operator.or_, (Q(player_id=x) for x in players_ids))).values()
-	
 	lst = []
 	for i in players:
 		if i['match_id'] in matches_to_consider_ids:
 			lst.append(i)
+	if not lst:
+		return "Sorry, Leader board is not availible."
 	df = pd.DataFrame(lst).groupby('player_id').sum().loc[:, "runs" : "total"].reset_index()
 	df['name'] = df.player_id.apply(lambda x:Players.objects.filter(id=x).get().name)
 	return df
@@ -123,8 +126,14 @@ def get_user_team_score(user_id):
 @user_passes_test(check_normal_user)
 def team_performance(request):
 	
-	user_id = request.user.id
-	df = get_user_team_score(user_id)
+	my_user_id = request.user.id
+	df = get_user_team_score(my_user_id)
+	if isinstance(df, str):
+		return HttpResponse(df)
+	# if df == "Sorry, Leader board is not availible.":
+		# return HttpResponse(df)
+	# if df == "You're not created you team yet, Please create you team first":
+		# return HttpResponse(df)
 	#    player_id  runs  wickets  catches  stumps  total  name
 	# 0        196    20        1        5       0     26   p_2
 	# 1        197     4        9        2       0     15   p_3
@@ -155,7 +164,13 @@ def leader_board(request):
 
 	my_user_id = request.user.id
 	
-	data = {user_id : get_user_team_score(user_id).total.sum() for user_id in users_ids}
+	data = {}
+	for user_id in users_ids:
+		x = get_user_team_score(user_id)
+		if isinstance(x, str):
+			return HttpResponse(x)
+		else:
+			data[user_id] = x.total.sum()
 	data = list(enumerate(sorted(data.items(), key=lambda x:x[1], reverse=True), start=1))       
 	 # [
 	 # (9, (4, 8)),

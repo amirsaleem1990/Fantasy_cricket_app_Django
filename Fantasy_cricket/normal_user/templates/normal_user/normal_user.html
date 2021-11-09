@@ -25,23 +25,24 @@
                     </div>
 
                     <div class="half_screen full-height-desk">
-                        <a href="/normal_user/team_performance">
-                            <div class="text-block three_row">
-                                <div class="image-container">
-                                    <img class="three_images" data-image="{% static 'pics/view_leader_board.png' %}" src="{% static 'pics/view_leader_board.png' %}" alt="">
-                                </div>
-                            </div>
-                        </a>
 
-                        <a href="/normal_user/leader_board" class="">
-                            <div class="text-block three_row">
-                                <div class="image-container">
-                                    <img class="three_images" data-image="{% static 'pics/view_player_scores.png' %}" src="{% static 'pics/view_player_scores.png' %}" alt="">
+                        {% if teams_exist %}
+                            <a href="/normal_user/team_performance">
+                                <div class="text-block three_row">
+                                    <div class="image-container">
+                                        <img class="three_images" data-image="{% static 'pics/view_leader_board.png' %}" src="{% static 'pics/view_leader_board.png' %}" alt="">
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
 
-                        {% if not teams_exist %}
+                            <a href="/normal_user/leader_board" class="">
+                                <div class="text-block three_row">
+                                    <div class="image-container">
+                                        <img class="three_images" data-image="{% static 'pics/view_player_scores.png' %}" src="{% static 'pics/view_player_scores.png' %}" alt="">
+                                    </div>
+                                </div>
+                            </a>
+                        {% else %}
                             <a href="/normal_user/create_team" class="">
                                 <div class="text-block three_row">
                                     <div class="image-container">
