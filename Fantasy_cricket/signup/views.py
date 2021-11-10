@@ -13,19 +13,11 @@ def create_user(request):
 	password = request.POST.get('password', None)
 	retype_password = request.POST.get('retype_password', None)
 
-	# if password != retype_password:
-		# ???
-
-	# Get data User table for given email
+	# Get User data for given email
 	u = User.objects.filter(email=email_address).values()
 	if not u: # if email not found 
 		# Create a user
 		User.objects.create_user(full_name=full_name, email=email_address, password=password, username=full_name).save()
-		# u = User(email=email_address, 
-		# 		 full_name=full_name, 
-		# 		 password=password
-		# 		 )
-		# u.save()
 		return render(request, 'user_created.html')
 	else: # if email already exists in User table.
 		return render(request, 'email_already_in_use.html')
