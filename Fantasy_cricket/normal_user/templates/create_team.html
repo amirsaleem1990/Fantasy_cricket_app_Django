@@ -73,7 +73,7 @@
 				<div style="background: red;" id="left_players">left_players: 1</div>
 				<div style="background: red;" id="left_countries">left_countries: 3</div>
 				<br>
-				<div                          id="selected_players">selected_players: 0</div>
+				<div id="selected_players">selected_players: 0</div>
 			</h3>
 
 			<div class="row">
@@ -127,13 +127,13 @@
 		                data: data,
 		                success: function(data) {
 
-			                $('#betsman_select_more').html      ("betsman_select_more      : " + data.betsman_select_more      );
-							$('#bowlers_select_more').html      ("bowlers_select_more      : " + data.bowlers_select_more      );
-							$('#all_rounder_select_more').html  ("all_rounder_select_more  : " + data.all_rounder_select_more  );
+			                $('#betsman_select_more').html("betsman_select_more      : " + data.betsman_select_more);
+							$('#bowlers_select_more').html("bowlers_select_more      : " + data.bowlers_select_more);
+							$('#all_rounder_select_more').html("all_rounder_select_more  : " + data.all_rounder_select_more);
 							$('#wicket_keeper_select_more').html("wicket_keeper_select_more: " + data.wicket_keeper_select_more);
-							$('#selected_players').html         ("selected_players         : " + data.selected_players         );
-							$('#left_players').html             ("left_players             : " + data.left_players             );
-							$('#left_countries').html           ("left_countries           : " + data.left_countries           );
+							$('#selected_players').html("selected_players         : " + data.selected_players);
+							$('#left_players').html("left_players             : " + data.left_players);
+							$('#left_countries').html("left_countries           : " + data.left_countries);
 							$('input[type=checkbox]').attr('disabled', eval(data.all_players_selected));
 							if (eval(data.all_players_selected) === true) {
 								var lst = data.ids_do_not_desable;
