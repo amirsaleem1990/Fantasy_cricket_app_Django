@@ -1,3 +1,4 @@
+
 # from django.core import paginator
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import *
@@ -33,9 +34,9 @@ def create_team(request):
 		ON c.id = p.country_id''').fetchall()
 
 	param = {'bowler' : [],
-            'all_rounder' : [],
-            'wicket_keeper' : [],
-            'batsman' : []}
+			'all_rounder' : [],
+			'wicket_keeper' : [],
+			'batsman' : []}
 	
 	for e,i in enumerate(data):
 		param[i[-1]].append((i[1], i[0], e))
@@ -85,8 +86,8 @@ def ajax_creation_form(request):
 	# can_submit = "true"
 	return JsonResponse({
 						 "selected_players"          : str(len(df)                                 ),
-		             "left_players"              : str(11 - len(df)                            ),
-		             "betsman_select_more"       : str(3 - df['type'].eq("batsman").sum()      ),
+						 "betsman_select_more"       : str(3 - df['type'].eq("batsman").sum()      ),
+						 "left_players"              : str(11 - len(df)                            ),
 						 "bowlers_select_more"       : str(3 - df['type'].eq("bowler").sum()       ),
 						 "all_rounder_select_more"   : str(2 - df['type'].eq("all_rounder").sum()  ),
 						 "wicket_keeper_select_more" : str(1 - df['type'].eq("wicket_keeper").sum()),
@@ -101,7 +102,7 @@ def ajax_creation_form(request):
 						 "left_players_task_completed"             : left_players_task_completed ,
 						 "left_countries_task_completed"           : left_countries_task_completed ,
 						 "can_submit"                              : can_submit,
-		                 })
+						 })
 
 
 def get_user_team_score(my_user_id):
@@ -109,16 +110,18 @@ def get_user_team_score(my_user_id):
 	if not bool(x):
 		return "You're not created you team yet, Please create you team first"
 	team_created_at = x.get().created_at
-	matches_to_consider_ids = [i['id'] for i in Matches.objects.filter(created_at__lte=team_created_at, recorded=1).values()]
+	matches_to_consider_ids = [i['id'] for i in Matches.objects.filter(created_at__gte=team_created_at, recorded=1).values()]
 
 	players_ids = [i['player_id_in_original_table'] for i in Team_players.objects.filter(user_id=my_user_id).values()]
 	players = Player_score.objects.filter(reduce(operator.or_, (Q(player_id=x) for x in players_ids))).values()
+	if not players:
+		return "Sorry, this page is not availible."
 	lst = []
 	for i in players:
 		if i['match_id'] in matches_to_consider_ids:
 			lst.append(i)
 	if not lst:
-		return "Sorry, Leader board is not availible."
+    		return "Sorry, this page is not availible #1"
 	df = pd.DataFrame(lst).groupby('player_id').sum().loc[:, "runs" : "total"].reset_index()
 	df['name'] = df.player_id.apply(lambda x:Players.objects.filter(id=x).get().name)
 	return df
@@ -130,10 +133,7 @@ def team_performance(request):
 	df = get_user_team_score(my_user_id)
 	if isinstance(df, str):
 		return HttpResponse(df)
-	# if df == "Sorry, Leader board is not availible.":
-		# return HttpResponse(df)
-	# if df == "You're not created you team yet, Please create you team first":
-		# return HttpResponse(df)
+	# df
 	#    player_id  runs  wickets  catches  stumps  total  name
 	# 0        196    20        1        5       0     26   p_2
 	# 1        197     4        9        2       0     15   p_3
@@ -186,24 +186,24 @@ def leader_board(request):
 	 # ]
 
 	# dummy data
-	data = [
-	(1, (21, 1433)),
-	(2, (20, 1420)),
-	(3, (15, 1333)),
-	(4, (14, 1200)),
-	(5, (19, 1100)),
-	(6, (16, 1099)),
-	(7, (11, 1095)),
-	(8, (13, 1050)),
-	(9, (12, 1000)),
-	(10, (22, 999)),
-	(11, (18, 998))
-	]
+	# data = [
+	# (1, (21, 1433)),
+	# (2, (20, 1420)),
+	# (3, (15, 1333)),
+	# (4, (14, 1200)),
+	# (5, (19, 1100)),
+	# (6, (16, 1099)),
+	# (7, (11, 1095)),
+	# (8, (13, 1050)),
+	# (9, (12, 1000)),
+	# (10, (22, 999)),
+	# (11, (18, 998))
+	# ]
 
 	my_data = [i for i in data if i[1][0] == my_user_id][0]
 
 	# https://www.youtube.com/watch?v=Z1A0TdZzDkE
-	paginator = Paginator(data, 3)
+	paginator = Paginator(data, 20)
 	page_number = request.GET.get('page')
 	page_obj = paginator.get_page(page_number)
 
