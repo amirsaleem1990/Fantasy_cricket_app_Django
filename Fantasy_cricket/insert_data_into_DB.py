@@ -12,7 +12,7 @@ NAME = [f'Country_{i}' for i in range(1,8)]
 CREATED_AT =[str(fake.date_time()) for i in range(7)]
 
 for name, created_at in zip(NAME, CREATED_AT):
-    country(name = name, created_at = created_at).save()
+    Country(name = name, created_at = created_at).save()
 # pd.DataFrame({"id"         : ID,
               # "name"       : NAME,
               # "created_at"   : CREATED_AT}).to_sql("country", if_exists="replace", con=conn, index=False)
