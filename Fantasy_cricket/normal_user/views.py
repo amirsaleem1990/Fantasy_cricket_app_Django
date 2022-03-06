@@ -6,16 +6,17 @@ from django.db import connection
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from super_user.models import *
+from super_user.models import Country, Players, Matches, Player_score
 import pandas as pd
 import operator
 from datetime import datetime
 from Login.models import User
-from .models import *
+from .models import Teams, Team_players
 from functools import reduce
 
 def check_normal_user(user):
    return not user.is_superuser
+
 
 
 @user_passes_test(check_normal_user)
@@ -63,7 +64,14 @@ def my_form(request):
 		user_id=request.user.id, 
 		created_at=':'.join(str(datetime.now()).split(":")[:2]) + ":00"
 		).save()
-	return HttpResponse("""<html><body><h1>Your team creates successfully</h1></body></html>""")
+	return HttpResponse("""
+	<html>
+	<body>
+		<h1>Your team creates successfully</h1>
+		<a href="http://127.0.0.1:8000/login">Go to main page</a>
+	</body>
+	</html>
+	""")
 
 
 @user_passes_test(check_normal_user)
@@ -104,30 +112,31 @@ def ajax_creation_form(request):
 						 })
 
 
-def get_user_team_score(my_user_id):
-	team_obj = Teams.objects.filter(user_id=my_user_id)
+def get_user_team_score(user_id):
+	team_obj = Teams.objects.filter(user_id=user_id)
 	if not bool(team_obj):
-		return "You're not created you team yet, Please create you team first"
+		return "You're not created you team yet, Please create your team first"
 	team_created_at = team_obj.get().created_at
 	matches_to_consider_ids = [i['id'] for i in Matches.objects.filter(created_at__gte=team_created_at, recorded=1).values()]
-
-	players_ids = [i['players_id'] for i in Team_players.objects.filter(user_id=my_user_id).values()]
+	# print("..................2", user_id)
+	players_ids = [i['players_id'] for i in Team_players.objects.filter(user_id=user_id).values()]
+	# print(players_ids)
+	# print("................................ 3")
 	players = Player_score.objects.filter(reduce(operator.or_, (Q(players_id=x) for x in players_ids))).values()
 	if not players:
 		return "Sorry, this page is not availible."
 	lst = []
 	for i in players:
 		if i['matches_id'] in matches_to_consider_ids:
-    			lst.append(i)
+				lst.append(i)
 	if not lst:
-    		return "Sorry, this page is not availible #1"
+			return "Sorry, this page is not availible #1"
 	df = pd.DataFrame(lst).groupby('players_id').sum().loc[:, "runs" : "total"].reset_index()
 	df['name'] = df.players_id.apply(lambda x:Players.objects.filter(id=x).get().name)
 	return df
 
 @user_passes_test(check_normal_user)
 def team_performance(request):
-	
 	my_user_id = request.user.id
 	df = get_user_team_score(my_user_id)
 	if isinstance(df, str):
@@ -166,10 +175,14 @@ def leader_board(request):
 	data = {}
 	for user_id in users_ids:
 		x = get_user_team_score(user_id)
+		if user_id == my_user_id and (isinstance(x, str)):
+			return HttpResponse("Sorry, this page is not availible #1")
 		if not isinstance(x, str):
-			data[user_id] = x.total.sum()
+    			data[user_id] = x.total.sum()
 	if not data:
 		return HttpResponse("Sorry, this page is not availible #1")
+	print("------------------------")
+	print(data)
 	data = list(enumerate(sorted(data.items(), key=lambda x:x[1], reverse=True), start=1))       
 	 # [
 	 # (9, (4, 8)),
@@ -183,7 +196,7 @@ def leader_board(request):
 	 # (1, (7, 2)),
 	 # (0, (9, 0))
 	 # ]
-	 
+
 	my_data = [i for i in data if i[1][0] == my_user_id][0]
 
 	# https://www.youtube.com/watch?v=Z1A0TdZzDkE
