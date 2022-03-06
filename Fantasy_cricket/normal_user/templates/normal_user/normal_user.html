@@ -6,10 +6,11 @@
         {% if teams_exist %}
             <a href="/normal_user/team_performance">Team performance</a>
             <br>
-            <a href="/normal_user/leader_board">Leader board</a>
+            <a href="/normal_user/leader_board">Leader board</a><br>
         {% else %}
-            <a href="/normal_user/create_team">Creat a team</a>
+            <a href="/normal_user/create_team">Creat a team</a><br>
         {% endif %}
+        <a href="{% url 'logout' %}">Log Out</a>
     </body>
 </html>
 {% comment %} <html class="no-js">    

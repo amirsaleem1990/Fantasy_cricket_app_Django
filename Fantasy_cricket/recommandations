@@ -1,0 +1,10 @@
+5) Use database postgreSql for scaleability
+
+7) Use sessions for login/logout
+
+8) Use debugging in django App
+ import pdb 
+ pdb.set_trace()
+
+13) team create successfull, no back option
+

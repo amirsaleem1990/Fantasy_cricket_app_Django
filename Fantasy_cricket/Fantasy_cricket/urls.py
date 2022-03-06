@@ -30,5 +30,5 @@ urlpatterns = [
     url("super_user", include("super_user.urls")),
     url("create_new_match", include("super_user.urls")),
     url("Create_new_country", include("super_user.urls")),
-    
+    url("logout", include("Logout.urls")),
 ]

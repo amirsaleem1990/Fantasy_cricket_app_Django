@@ -3,8 +3,9 @@ from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 from datetime import datetime
 from operator import itemgetter	
-from .models import *
+from .models import Country, Players, Matches, Player_score
 from django.contrib.auth.decorators import *
+
 
 # def check_admin(user):
    # return user.is_superuser
